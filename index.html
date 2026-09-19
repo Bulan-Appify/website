@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bulan — Software development, testing, cyber security & AI automation | South Africa</title>
+<meta name="description" content="Bulan is a South African engineering studio that builds, tests, secures and automates business-critical software. Transparent pricing, full code ownership, POPIA-aligned delivery. Serving South Africa and clients worldwide.">
+<link rel="canonical" href="https://www.bulan.co.za/">
+<!-- STAGING ONLY — delete these two lines before launch. See README §2.4. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#05070B">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/favicon.svg">
+<link rel="manifest" href="site.webmanifest">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bulan">
+<meta property="og:locale" content="en_ZA">
+<meta property="og:url" content="https://www.bulan.co.za/">
+<meta property="og:title" content="Bulan — Build it. Prove it. Defend it. Scale it.">
+<meta property="og:description" content="A South African engineering studio that builds, tests, secures and automates business-critical software. One accountable team, four disciplines.">
+<meta property="og:image" content="https://www.bulan.co.za/assets/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/forms.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://www.bulan.co.za/#org",
+      "name": "Bulan",
+      "legalName": "Bulan Technologies (Pty) Ltd",
+      "url": "https://www.bulan.co.za/",
+      "logo": "https://www.bulan.co.za/assets/img/logo.svg",
+      "slogan": "Build it. Prove it. Defend it. Scale it.",
+      "description": "South African engineering studio delivering software development, software testing and quality engineering, cyber security and AI automation.",
+      "email": "hello@bulan.co.za",
+      "telephone": "+27-00-000-0000",
+      "address": { "@type": "PostalAddress", "addressLocality": "Johannesburg", "addressCountry": "ZA" },
+      "areaServed": [
+        { "@type": "Country", "name": "South Africa" },
+        { "@type": "Place", "name": "Worldwide" }
+      ],
+      "knowsAbout": ["Software development","Software testing","Quality engineering","Penetration testing","Cyber security","POPIA compliance","AI automation","Cloud engineering"],
+      "makesOffer": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Software development" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Software testing and quality engineering" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cyber security" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI and intelligent automation" } }
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.bulan.co.za/#site",
+      "url": "https://www.bulan.co.za/",
+      "name": "Bulan",
+      "publisher": { "@id": "https://www.bulan.co.za/#org" },
+      "inLanguage": "en-ZA"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "How quickly can you start?",
+          "acceptedAnswer": { "@type": "Answer", "text": "We reply to every brief within one business day and can usually begin a discovery engagement within two to three weeks. Accelerated starts within five working days are available at a premium." } },
+        { "@type": "Question", "name": "Who owns the code you write?",
+          "acceptedAnswer": { "@type": "Answer", "text": "You do. The repository sits in your organisation from the first commit and all intellectual property transfers to you on final payment. There is no lock-in and no hostage code." } },
+        { "@type": "Question", "name": "Do you work with clients outside South Africa?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. We work in SAST (UTC+2), which overlaps the full European working day and the morning in North America. We invoice in ZAR, USD, GBP or EUR." } },
+        { "@type": "Question", "name": "Are you POPIA compliant?",
+          "acceptedAnswer": { "@type": "Answer", "text": "We operate as a POPIA-aligned responsible party and operator. We sign an operator agreement before touching client personal information, minimise what we collect, and can keep all client data inside South African data residency where required." } },
+        { "@type": "Question", "name": "What does a project cost?",
+          "acceptedAnswer": { "@type": "Answer", "text": "We publish indicative starting prices for every service and provide a free instant pro-forma quotation through the website. A compact web application starts around R185 000 and a web application penetration test around R65 000, both excluding VAT." } }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ============ HEADER ============ -->
+<header class="hdr">
+  <div class="hdr-in">
+    <a class="logo" href="index.html" aria-label="Bulan — home">
+      <svg class="logo-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
+        <circle cx="16" cy="16" r="15" stroke="rgba(138,169,255,.35)" stroke-width="1.2"/>
+        <path d="M20.9 6.15A11 11 0 1 0 20.9 25.85 13.5 13.5 0 0 1 20.9 6.15Z" fill="#8AA9FF"/>
+      </svg>
+      <span class="logo-word">Bulan</span>
+    </a>
+
+    <nav class="nav" aria-label="Primary">
+      <div class="nav-item">
+        <button class="nav-link" aria-haspopup="true" aria-expanded="false">Services
+          <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="drop">
+          <div class="drop-grid">
+            <a class="drop-link" href="services/software-development.html">
+              <span class="drop-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+              <span><span class="drop-t">Software Development</span><span class="drop-d">Web, mobile, APIs, cloud and legacy modernisation.</span></span>
+            </a>
+            <a class="drop-link" href="services/software-testing.html">
+              <span class="drop-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+              <span><span class="drop-t">Software Testing</span><span class="drop-d">Test strategy, automation, performance, accessibility.</span></span>
+            </a>
+            <a class="drop-link" href="services/cyber-security.html">
+              <span class="drop-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+              <span><span class="drop-t">Cyber Security</span><span class="drop-d">Penetration testing, POPIA readiness, monitoring.</span></span>
+            </a>
+            <a class="drop-link" href="services/ai-automation.html">
+              <span class="drop-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.1 5.1l2.1 2.1M16.8 16.8l2.1 2.1M18.9 5.1l-2.1 2.1M7.2 16.8l-2.1 2.1"/></svg></span>
+              <span><span class="drop-t">AI &amp; Automation</span><span class="drop-d">Process automation, copilots, document intelligence.</span></span>
+            </a>
+          </div>
+          <div class="drop-foot">
+            <span class="small muted">Not sure where to start? Book a free 30-minute technical call.</span>
+            <a class="tlink" href="services.html">All services
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <a class="nav-link" href="approach.html">How we work</a>
+      <a class="nav-link" href="industries.html">Industries</a>
+      <a class="nav-link" href="about.html">About</a>
+      <a class="nav-link" href="insights.html">Insights</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a class="btn btn-ghost btn-sm" href="quote.html">Get a quote</a>
+      <a class="btn btn-accent btn-sm" href="contact.html">Start a brief</a>
+      <button class="burger" aria-expanded="false" aria-controls="mnav" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mnav" id="mnav">
+  <p class="mlabel">Services</p>
+  <div class="sub">
+    <a href="services/software-development.html">Software Development</a>
+    <a href="services/software-testing.html">Software Testing &amp; Quality</a>
+    <a href="services/cyber-security.html">Cyber Security</a>
+    <a href="services/ai-automation.html">AI &amp; Intelligent Automation</a>
+  </div>
+  <p class="mlabel">Company</p>
+  <a href="approach.html">How we work</a>
+  <a href="industries.html">Industries</a>
+  <a href="about.html">About</a>
+  <a href="insights.html">Insights</a>
+  <a href="contact.html">Contact</a>
+  <div class="mnav-cta">
+    <a class="btn btn-ghost btn-block" href="quote.html">Get an instant quote</a>
+    <a class="btn btn-accent btn-block" href="contact.html">Start a brief</a>
+  </div>
+</div>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="container hero-in">
+    <p class="eyebrow">Johannesburg · Serving South Africa &amp; the world</p>
+    <h1>Software that holds under pressure.</h1>
+    <p class="lead-lg">Bulan builds, tests, secures and automates the systems your business cannot afford to get wrong. Four disciplines, one accountable team, one invoice.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary btn-lg" href="contact.html">Start a brief
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn-ghost btn-lg" href="quote.html">Build an instant quote</a>
+    </div>
+
+    <div class="spine">
+      <div class="spine-i"><p class="spine-v"><span class="spine-n">01</span> Build it.</p><p class="spine-d">Software engineering that ships — web, mobile, APIs, cloud.</p></div>
+      <div class="spine-i"><p class="spine-v"><span class="spine-n">02</span> Prove it.</p><p class="spine-d">Independent testing and quality engineering with evidence.</p></div>
+      <div class="spine-i"><p class="spine-v"><span class="spine-n">03</span> Defend it.</p><p class="spine-d">Offensive security, POPIA readiness and continuous monitoring.</p></div>
+      <div class="spine-i"><p class="spine-v"><span class="spine-n">04</span> Scale it.</p><p class="spine-d">AI and automation applied where the payback is real.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE ARGUMENT ============ -->
+<section class="section section--tight">
+  <div class="container">
+    <div class="split">
+      <div>
+        <p class="eyebrow">The problem</p>
+        <h2>Most vendors hand you the build and wish you luck.</h2>
+      </div>
+      <div class="stack-24">
+        <p class="lead">The software gets delivered. Then the bugs surface in production, the penetration test lands three months later from a different supplier, and nobody can say whose fault it is. Meanwhile the invoices keep arriving from three directions.</p>
+        <p class="lead">Bulan exists because building, proving and defending software should not be three separate procurement exercises. We do all three under one contract, with one team that cannot pass the blame sideways.</p>
+        <div class="row mt-8">
+          <a class="tlink" href="approach.html">See exactly how we work
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <p class="eyebrow">What we do</p>
+      <h2>Four disciplines. One accountable team.</h2>
+      <p class="lead">Take one. Take all four. They are priced separately and they work better together — every discipline shares the same standards, the same repository and the same delivery lead.</p>
+    </div>
+
+    <div class="grid g-2">
+
+      <article class="card card-link" data-reveal>
+        <div class="svc">
+          <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+          <div>
+            <p class="mono accent mb-8">01 — Build it</p>
+            <h3>Software Development</h3>
+            <p>Custom web and mobile applications, integration layers, cloud infrastructure and legacy modernisation. Built to be maintained by someone other than us.</p>
+            <ul class="checks mt-24">
+              <li>Web &amp; mobile application development</li>
+              <li>API design, integration &amp; middleware</li>
+              <li>Cloud architecture, DevOps &amp; CI/CD</li>
+              <li>Legacy modernisation &amp; system replatforming</li>
+            </ul>
+            <div class="card-foot">
+              <a class="tlink" href="services/software-development.html">Software development
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card card-link" data-reveal data-d="1">
+        <div class="svc">
+          <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+          <div>
+            <p class="mono accent mb-8">02 — Prove it</p>
+            <h3>Software Testing &amp; Quality</h3>
+            <p>Independent quality engineering, whether we wrote the code or you did. Defects found with evidence, not opinions — and a regression suite you keep.</p>
+            <ul class="checks mt-24">
+              <li>Test strategy &amp; QA maturity assessment</li>
+              <li>Test automation frameworks &amp; CI integration</li>
+              <li>Performance, load &amp; resilience testing</li>
+              <li>Accessibility testing to WCAG 2.2 AA</li>
+            </ul>
+            <div class="card-foot">
+              <a class="tlink" href="services/software-testing.html">Software testing
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card card-link" data-reveal>
+        <div class="svc">
+          <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+          <div>
+            <p class="mono accent mb-8">03 — Defend it</p>
+            <h3>Cyber Security</h3>
+            <p>Authorised offensive testing, secure engineering and the compliance groundwork South African regulators expect. Reports your board can read and your developers can action.</p>
+            <ul class="checks mt-24">
+              <li>Penetration testing — web, mobile, API, network</li>
+              <li>Secure code review &amp; cloud posture assessment</li>
+              <li>POPIA readiness &amp; ISO/IEC 27001 gap analysis</li>
+              <li>Phishing simulation &amp; staff awareness training</li>
+            </ul>
+            <div class="card-foot">
+              <a class="tlink" href="services/cyber-security.html">Cyber security
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card card-link" data-reveal data-d="1">
+        <div class="svc">
+          <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.1 5.1l2.1 2.1M16.8 16.8l2.1 2.1M18.9 5.1l-2.1 2.1M7.2 16.8l-2.1 2.1"/></svg></span>
+          <div>
+            <p class="mono accent mb-8">04 — Scale it</p>
+            <h3>AI &amp; Intelligent Automation</h3>
+            <p>Automation applied to the processes where it actually pays back. We will tell you which of your ideas are not worth building — that conversation is free.</p>
+            <ul class="checks mt-24">
+              <li>Business process &amp; workflow automation</li>
+              <li>Document intelligence &amp; data extraction</li>
+              <li>Internal assistants grounded in your own content</li>
+              <li>AI governance, evaluation &amp; safe deployment</li>
+            </ul>
+            <div class="card-foot">
+              <a class="tlink" href="services/ai-automation.html">AI &amp; automation
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMMITMENTS ============ -->
+<section class="section section--tight">
+  <div class="container">
+    <div class="sec-head center" data-reveal>
+      <p class="eyebrow eyebrow--signal">Our commitments</p>
+      <h2>Promises we put in the contract.</h2>
+      <p class="lead">Not statistics from a marketing deck. These are contractual terms we sign up to on every engagement.</p>
+    </div>
+    <div class="commits" data-reveal>
+      <div class="commit"><p class="commit-n">1 <em>day</em></p><p class="commit-l">Every brief gets a considered human reply within one business day — not an auto-responder.</p></div>
+      <div class="commit"><p class="commit-n">100<em>%</em></p><p class="commit-l">You own the code. Your repository, your cloud account, your intellectual property, from the first commit.</p></div>
+      <div class="commit"><p class="commit-n">30 <em>days</em></p><p class="commit-l">Defect warranty. Anything we broke, found within 30 days of release, we fix at no charge.</p></div>
+      <div class="commit"><p class="commit-n">0 <em>lock-in</em></p><p class="commit-l">Retainers run month to month on 30 days' notice, with a documented handover if you leave.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY A NEW FIRM ============ -->
+<section class="section">
+  <div class="container">
+    <div class="split">
+      <div data-reveal>
+        <p class="eyebrow">Straight talk</p>
+        <h2>We are a new firm. Here is why that is safe for you.</h2>
+        <p class="lead mt-24">Bulan was founded in 2026. We are not going to pretend to a twenty-year history or paste logos on this page that we have not earned. Instead we have removed the risk of working with us — deliberately, and in writing.</p>
+        <div class="row mt-32">
+          <a class="btn btn-ghost" href="about.html">Meet the founders</a>
+          <a class="btn btn-quiet" href="approach.html">Read our delivery method</a>
+        </div>
+      </div>
+      <div class="grid" data-reveal data-d="1">
+        <div class="card">
+          <span class="card-num">01</span>
+          <h4>Start with a small, fixed-fee pilot</h4>
+          <p class="mt-8">A two-week paid discovery or a single assessment. You get a costed plan and working artefacts, and you decide whether to continue. No twelve-month commitment to find out whether we are any good.</p>
+        </div>
+        <div class="card">
+          <span class="card-num">02</span>
+          <h4>The code never lives with us</h4>
+          <p class="mt-8">Your repository, your cloud tenancy, your domains and your secrets — under your control from day one. If we disappeared tomorrow, your team would still have everything.</p>
+        </div>
+        <div class="card">
+          <span class="card-num">03</span>
+          <h4>Our prices are public</h4>
+          <p class="mt-8">Every service on this site has an indicative starting price and you can generate a pro-forma quotation in ninety seconds without speaking to a salesperson. Nobody is being profiled for what they can afford.</p>
+        </div>
+        <div class="card">
+          <span class="card-num">04</span>
+          <h4>Named, senior people do the work</h4>
+          <p class="mt-8">You meet the engineers who will be on your project, and they stay on it. No bait-and-switch between the pitch team and the delivery team, because we are small enough that there is only one team.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <p class="eyebrow">How an engagement runs</p>
+      <h2>Five stages, no mystery.</h2>
+      <p class="lead">You always know what is happening, what it costs, and what you receive at the end of each stage.</p>
+    </div>
+    <div class="steps" data-reveal>
+      <div class="step">
+        <p class="step-n">STAGE 01</p>
+        <div>
+          <h3>Conversation</h3>
+          <p>A free 30-minute technical call with an engineer, not an account manager. We establish whether we are the right fit and say so honestly if we are not.</p>
+          <div class="step-meta"><span class="pill">Free</span><span class="pill">30 minutes</span><span class="pill">No obligation</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <p class="step-n">STAGE 02</p>
+        <div>
+          <h3>Discovery</h3>
+          <p>A fixed-fee, time-boxed investigation. We map requirements, constraints, integrations and risks, then produce a solution architecture and a costed delivery plan you own outright — even if you take it elsewhere.</p>
+          <div class="step-meta"><span class="pill">Fixed fee</span><span class="pill">1–2 weeks</span><span class="pill pill--accent">Deliverable: costed plan</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <p class="step-n">STAGE 03</p>
+        <div>
+          <h3>Delivery</h3>
+          <p>Two-week iterations with a working demo at the end of each one. Quality gates, security checks and accessibility checks run inside the pipeline, not as an afterthought. You see the board, the burn and the build at all times.</p>
+          <div class="step-meta"><span class="pill">2-week sprints</span><span class="pill">Demo every sprint</span><span class="pill">Shared board</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <p class="step-n">STAGE 04</p>
+        <div>
+          <h3>Verification</h3>
+          <p>Independent test execution, a security review, and a performance baseline before anything reaches production. You receive the evidence pack: test results, defect register, security findings and remediation status.</p>
+          <div class="step-meta"><span class="pill">Evidence pack</span><span class="pill">Security review</span><span class="pill">Go / no-go</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <p class="step-n">STAGE 05</p>
+        <div>
+          <h3>Handover or care</h3>
+          <p>Documentation, runbooks and a working session with your team. Then either we step away cleanly, or you take a care plan and we keep the thing patched, monitored and healthy.</p>
+          <div class="step-meta"><span class="pill">Runbooks</span><span class="pill">30-day warranty</span><span class="pill">Optional care plan</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STANDARDS ============ -->
+<section class="section section--tight">
+  <div class="container">
+    <div class="split">
+      <div data-reveal>
+        <p class="eyebrow eyebrow--signal">Standards &amp; governance</p>
+        <h2>The benchmarks our work is measured against.</h2>
+        <p class="lead mt-24">These are the frameworks we build and test to. Where a client needs a formal certification we will tell you plainly what we hold today and what we do not — and, where useful, work alongside an accredited body rather than overstate our position.</p>
+        <div class="chips">
+          <span class="chip">OWASP Top 10</span>
+          <span class="chip">OWASP ASVS</span>
+          <span class="chip">OWASP MASVS</span>
+          <span class="chip">NIST CSF 2.0</span>
+          <span class="chip">ISO/IEC 27001 principles</span>
+          <span class="chip">ISTQB-aligned test process</span>
+          <span class="chip">WCAG 2.2 AA</span>
+          <span class="chip">POPIA</span>
+          <span class="chip">GDPR</span>
+          <span class="chip">CIS Benchmarks</span>
+        </div>
+      </div>
+      <div class="grid g-2" data-reveal data-d="1">
+        <div class="card">
+          <h4 class="accent mb-8">Data protection</h4>
+          <p>We sign an operator agreement before we touch personal information, collect the minimum we need, and can keep client data resident in South Africa where the law or your policy requires it.</p>
+        </div>
+        <div class="card">
+          <h4 class="accent mb-8">Authorised testing only</h4>
+          <p>Security testing happens under signed authorisation with agreed rules of engagement, defined scope, defined windows and a named emergency contact on both sides. No exceptions.</p>
+        </div>
+        <div class="card">
+          <h4 class="accent mb-8">Confidentiality</h4>
+          <p>Mutual NDA available before the first call. Client identities are never published without written permission, which is one reason this site carries no logo wall.</p>
+        </div>
+        <div class="card">
+          <h4 class="accent mb-8">Local compliance</h4>
+          <p>Registered South African company with a PAIA manual, a registered Information Officer and a B-BBEE affidavit on file — the documents your procurement team will ask for.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING / QUOTE ============ -->
+<section class="section">
+  <div class="container">
+    <div class="card pad-xl" data-reveal>
+      <div class="split ai-center">
+        <div>
+          <p class="eyebrow">Transparent pricing</p>
+          <h2>Get a pro-forma quotation in ninety seconds.</h2>
+          <p class="lead mt-24">Pick the services you need, choose your timeline, and the builder produces a formatted pro-forma quotation you can download, print or send straight to your finance team. No gate, no sales call, no waiting three days for a number.</p>
+          <div class="row mt-32">
+            <a class="btn btn-primary btn-lg" href="quote.html">Build my quote
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn-ghost btn-lg" href="approach.html#pricing">How we price</a>
+          </div>
+        </div>
+        <div>
+          <ul class="checks checks--signal">
+            <li><strong>Indicative starting prices published</strong> for all 38 service lines, in rand, excluding VAT.</li>
+            <li><strong>A real document</strong> — quotation number, validity date, payment terms and banking details, ready for procurement.</li>
+            <li><strong>Clearly marked indicative.</strong> It is a pro-forma, not a tax invoice, and the final figure is confirmed after discovery.</li>
+            <li><strong>Works for international clients</strong> — we invoice in ZAR, USD, GBP or EUR.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INDUSTRIES ============ -->
+<section class="section section--tight">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <p class="eyebrow">Where we work</p>
+      <h2>Sectors where getting it wrong is expensive.</h2>
+    </div>
+    <div class="grid g-4" data-reveal>
+      <div class="card"><h4>Financial services &amp; fintech</h4><p class="mt-8">Payments, lending, onboarding and the regulatory reporting that surrounds them.</p></div>
+      <div class="card"><h4>Healthcare</h4><p class="mt-8">Patient data, practice systems and integrations where privacy is not negotiable.</p></div>
+      <div class="card"><h4>Retail &amp; e-commerce</h4><p class="mt-8">Storefronts, stock, fulfilment and the peak-trading load that breaks them.</p></div>
+      <div class="card"><h4>Logistics &amp; supply chain</h4><p class="mt-8">Tracking, scheduling and integration across partners who all use different systems.</p></div>
+      <div class="card"><h4>Mining &amp; industrial</h4><p class="mt-8">Operational reporting, compliance systems and safety-critical data capture.</p></div>
+      <div class="card"><h4>Public sector &amp; NGOs</h4><p class="mt-8">Citizen-facing services, grant systems and accessibility obligations.</p></div>
+      <div class="card"><h4>Education</h4><p class="mt-8">Learning platforms, student systems and the privacy rules around minors.</p></div>
+      <div class="card"><h4>Professional services</h4><p class="mt-8">Practice management, client portals and document-heavy workflows worth automating.</p></div>
+    </div>
+    <div class="row mt-32" data-reveal>
+      <a class="tlink" href="industries.html">Industry detail
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INSIGHTS ============ -->
+<section class="section">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <p class="eyebrow">Insights</p>
+      <h2>Things worth knowing before you spend money.</h2>
+    </div>
+    <div class="grid g-3">
+      <article class="card post card-link" data-reveal>
+        <span class="pill pill--accent">Compliance</span>
+        <h3><a href="insights/popia-compliance-for-south-african-websites.html">POPIA is not a privacy policy: what South African businesses actually have to do</a></h3>
+        <p class="mt-8">A checklist of the obligations most SA companies have missed, and what the Information Regulator can actually do about it.</p>
+        <div class="post-foot"><p class="meta-row"><span>11 min read</span><span class="dot"></span><span>Cyber security</span></p></div>
+      </article>
+      <article class="card post card-link" data-reveal data-d="1">
+        <span class="pill pill--accent">Quality</span>
+        <h3><a href="insights/what-software-defects-really-cost.html">What software defects really cost — and why testing is the cheapest insurance you will buy</a></h3>
+        <p class="mt-8">The arithmetic of finding a bug in design versus finding it in production, worked through with real South African numbers.</p>
+        <div class="post-foot"><p class="meta-row"><span>9 min read</span><span class="dot"></span><span>Software testing</span></p></div>
+      </article>
+      <article class="card post card-link" data-reveal data-d="2">
+        <span class="pill pill--accent">AI</span>
+        <h3><a href="insights/ai-automation-worth-building-first.html">AI automation without the hype: the five processes worth doing first</a></h3>
+        <p class="mt-8">How to pick automation projects by payback rather than by how impressive they sound in a board meeting.</p>
+        <div class="post-foot"><p class="meta-row"><span>10 min read</span><span class="dot"></span><span>AI &amp; automation</span></p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="section section--tight">
+  <div class="container container--mid">
+    <div class="sec-head" data-reveal>
+      <p class="eyebrow">Questions</p>
+      <h2>The things people ask us first.</h2>
+    </div>
+    <div class="acc" data-reveal>
+      <div class="acc-i">
+        <button class="acc-btn" aria-expanded="false">How quickly can you start?<span class="acc-sign" aria-hidden="true"></span></button>
+        <div class="acc-panel"><div><div class="acc-body">
+          <p>We reply to every brief within one business day and can usually begin a discovery engagement within two to three weeks. If you need to move faster, an accelerated start within five working days is available — it carries an 18% premium because it means reprioritising other work, and the quote builder shows you that cost up front.</p>
+        </div></div></div>
+      </div>
+      <div class="acc-i">
+        <button class="acc-btn" aria-expanded="false">Who owns the code you write?<span class="acc-sign" aria-hidden="true"></span></button>
+        <div class="acc-panel"><div><div class="acc-body">
+          <p>You do, completely. The repository sits in your organisation's account from the first commit, infrastructure runs in your cloud tenancy, and all intellectual property transfers to you on final payment. We keep no hostage code, no proprietary framework you have to license, and no administrative keys after handover.</p>
+        </div></div></div>
+      </div>
+      <div class="acc-i">
+        <button class="acc-btn" aria-expanded="false">Do you work with clients outside South Africa?<span class="acc-sign" aria-hidden="true"></span></button>
+        <div class="acc-panel"><div><div class="acc-body">
+          <p>Yes, and the time zone helps. South African Standard Time is UTC+2, which overlaps the entire European working day and the morning across North America. We invoice in ZAR, USD, GBP or EUR, and we are comfortable working to GDPR as well as POPIA.</p>
+        </div></div></div>
+      </div>
+      <div class="acc-i">
+        <button class="acc-btn" aria-expanded="false">Can you test or secure software that someone else built?<span class="acc-sign" aria-hidden="true"></span></button>
+        <div class="acc-panel"><div><div class="acc-body">
+          <p>Often that is exactly the right engagement. Independent testing and independent security assessment are more credible when the assessor did not write the code. We will report what we find without diplomacy, and we will not use the findings as a sales pitch to rebuild the system unless rebuilding genuinely is the cheapest option.</p>
+        </div></div></div>
+      </div>
+      <div class="acc-i">
+        <button class="acc-btn" aria-expanded="false">What does a project actually cost?<span class="acc-sign" aria-hidden="true"></span></button>
+        <div class="acc-panel"><div><div class="acc-body">
+          <p>Indicative starting prices are published for every service. A compact web application starts around R185 000, a web application penetration test around R65 000, and a two-week discovery is R45 000 — all excluding VAT. Use the <a href="quote.html">quote builder</a> to assemble a pro-forma for your specific scope, or read <a href="approach.html#pricing">how we price</a> for the reasoning behind the numbers.</p>
+        </div></div></div>
+      </div>
+      <div class="acc-i">
+        <button class="acc-btn" aria-expanded="false">Are you B-BBEE compliant, and can you handle procurement paperwork?<span class="acc-sign" aria-hidden="true"></span></button>
+        <div class="acc-panel"><div><div class="acc-body">
+          <p>We are a registered South African company with a B-BBEE affidavit, a PAIA manual, a registered Information Officer and standard vendor documentation ready to go. Ask us and you will have the pack the same day — we know that a supplier who cannot produce these quickly is a supplier your procurement team will quietly drop.</p>
+        </div></div></div>
+      </div>
+      <div class="acc-i">
+        <button class="acc-btn" aria-expanded="false">What happens if we want to leave?<span class="acc-sign" aria-hidden="true"></span></button>
+        <div class="acc-panel"><div><div class="acc-body">
+          <p>Retainers run month to month with 30 days' notice. On exit you receive documentation, runbooks, credentials and a working handover session with whoever takes over. We would rather you leave well and come back later than feel trapped and resent it.</p>
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="section cta-band">
+  <div class="container center">
+    <p class="eyebrow center-x inline-flex">Let's begin</p>
+    <h2>Tell us what is breaking, or what you want to build.</h2>
+    <p class="lead center-x mt-24 mw-56">One business day to a real reply from an engineer. Free 30-minute call. No obligation, no salesperson, and an honest answer if we are not the right firm for the job.</p>
+    <div class="row mt-32 jc-center">
+      <a class="btn btn-primary btn-lg" href="contact.html">Start a brief
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn-ghost btn-lg" href="quote.html">Build an instant quote</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="ftr">
+  <div class="container">
+    <div class="ftr-grid">
+      <div class="ftr-brand">
+        <a class="logo" href="index.html" aria-label="Bulan — home">
+          <svg class="logo-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
+            <circle cx="16" cy="16" r="15" stroke="rgba(138,169,255,.35)" stroke-width="1.2"/>
+            <path d="M20.9 6.15A11 11 0 1 0 20.9 25.85 13.5 13.5 0 0 1 20.9 6.15Z" fill="#8AA9FF"/>
+          </svg>
+          <span class="logo-word">Bulan</span>
+        </a>
+        <p>Build it. Prove it. Defend it. Scale it. A South African engineering studio for software that has to work.</p>
+        <div class="chips">
+          <span class="chip">POPIA aligned</span>
+          <span class="chip">B-BBEE affidavit</span>
+          <span class="chip">NDA on request</span>
+        </div>
+        <div class="soc mt-24">
+          <a href="https://www.linkedin.com/company/bulan" aria-label="Bulan on LinkedIn" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95C20.4 8.75 21 11.2 21 14.4V21h-4v-5.85c0-1.4-.03-3.2-2-3.2-2 0-2.3 1.53-2.3 3.1V21H9z"/></svg>
+          </a>
+          <a href="contact.html" aria-label="Email Bulan">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="services/software-development.html">Software Development</a></li>
+          <li><a href="services/software-testing.html">Software Testing</a></li>
+          <li><a href="services/cyber-security.html">Cyber Security</a></li>
+          <li><a href="services/ai-automation.html">AI &amp; Automation</a></li>
+          <li><a href="services.html">All services</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Bulan</a></li>
+          <li><a href="approach.html">How we work</a></li>
+          <li><a href="industries.html">Industries</a></li>
+          <li><a href="about.html#careers">Careers</a></li>
+          <li><a href="insights.html">Insights</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Get started</h4>
+        <ul>
+          <li><a href="contact.html">Start a brief</a></li>
+          <li><a href="quote.html">Instant quote</a></li>
+          <li><a href="approach.html#pricing">Pricing</a></li>
+          <li><a href="approach.html#engagement">Engagement models</a></li>
+          <li><a href="contact.html#vendor">Vendor documents</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@bulan.co.za">hello@bulan.co.za</a></li>
+          <li><a href="tel:+270000000000">+27 00 000 0000</a></li>
+          <li><span class="muted fs-15">Johannesburg, South Africa</span></li>
+          <li><span class="muted fs-15">Mon–Fri, 08:00–17:00 SAST</span></li>
+          <li><a href="legal/vulnerability-disclosure.html">Report a vulnerability</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ftr-bot">
+      <p>© <span data-year>2026</span> Bulan Technologies (Pty) Ltd. All rights reserved.</p>
+      <div class="ftr-legal">
+        <a href="legal/privacy.html">Privacy &amp; POPIA</a>
+        <a href="legal/paia.html">PAIA manual</a>
+        <a href="legal/terms.html">Terms</a>
+        <a href="legal/cookies.html">Cookies</a>
+        <a href="legal/vulnerability-disclosure.html">Security</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "Bulan — software, testing, security, AI",
+  "short_name": "Bulan",
+  "description": "A South African engineering studio that builds, tests, secures and automates business-critical software.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#05070B",
+  "theme_color": "#05070B",
+  "lang": "en-ZA",
+  "icons": [
+    { "src": "/assets/img/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/assets/img/og.png", "sizes": "1200x630", "type": "image/png" }
+  ]
+}

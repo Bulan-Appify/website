@@ -1,0 +1,13 @@
+# Bulan — vulnerability disclosure contact
+# https://www.bulan.co.za/legal/vulnerability-disclosure.html
+#
+# TODO before launch: update Contact, and set Expires to a date within
+# the next 12 months. Diarise a reminder to refresh it annually — an
+# expired security.txt is worse than none at all.
+
+Contact: mailto:security@bulan.co.za
+Contact: https://www.bulan.co.za/legal/vulnerability-disclosure.html
+Expires: 2027-09-19T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://www.bulan.co.za/.well-known/security.txt
+Policy: https://www.bulan.co.za/legal/vulnerability-disclosure.html

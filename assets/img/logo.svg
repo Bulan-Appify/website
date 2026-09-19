@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168 32" width="168" height="32" role="img" aria-label="Bulan">
+  <circle cx="16" cy="16" r="15" fill="none" stroke="#8AA9FF" stroke-opacity=".35" stroke-width="1.2"/>
+  <path d="M20.9 6.15A11 11 0 1 0 20.9 25.85 13.5 13.5 0 0 1 20.9 6.15Z" fill="#8AA9FF"/>
+  <text x="42" y="22" font-family="Inter Tight, Inter, Segoe UI, Helvetica, Arial, sans-serif"
+        font-size="18" font-weight="600" letter-spacing=".3" fill="#E9EEF8">Bulan</text>
+</svg>

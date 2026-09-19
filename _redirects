@@ -1,0 +1,22 @@
+# Netlify / Cloudflare Pages redirects.
+# Extension-less URLs, in case anyone links to them that way.
+
+/services/software-development   /services/software-development.html   301
+/services/software-testing       /services/software-testing.html       301
+/services/cyber-security         /services/cyber-security.html         301
+/services/ai-automation          /services/ai-automation.html          301
+/services                        /services.html                        301
+/approach                        /approach.html                        301
+/industries                      /industries.html                      301
+/about                           /about.html                           301
+/insights                        /insights.html                        301
+/contact                         /contact.html                         301
+/quote                           /quote.html                           301
+/privacy                         /legal/privacy.html                   301
+/paia                            /legal/paia.html                      301
+/terms                           /legal/terms.html                     301
+/cookies                         /legal/cookies.html                   301
+/security                        /legal/vulnerability-disclosure.html  301
+
+# Catch-all 404
+/*   /404.html   404

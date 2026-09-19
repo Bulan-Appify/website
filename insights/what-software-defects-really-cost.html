@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What Software Defects Really Cost | Testing ROI for SA Businesses — Bulan</title>
+<meta name="description" content="The arithmetic of catching a software defect in design versus in production, worked through with South African numbers — and how to size a testing budget you can defend to a board.">
+<link rel="canonical" href="https://www.bulan.co.za/insights/what-software-defects-really-cost.html">
+<!-- STAGING ONLY — delete these two lines before launch. See README §2.4. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#05070B">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/img/favicon.svg">
+<link rel="manifest" href="../site.webmanifest">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Bulan">
+<meta property="og:locale" content="en_ZA">
+<meta property="og:url" content="https://www.bulan.co.za/insights/what-software-defects-really-cost.html">
+<meta property="og:title" content="What software defects really cost">
+<meta property="og:description" content="The arithmetic of catching a software defect in design versus in production, worked through with South African numbers — and how to size a testing budget you can defend to a board.">
+<meta property="og:image" content="https://www.bulan.co.za/assets/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/forms.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "What software defects really cost — and why testing is the cheapest insurance you will buy",
+      "description": "The arithmetic of finding a software defect in design versus in production, worked through with South African numbers, and how to size a testing budget defensibly.",
+      "url": "https://www.bulan.co.za/insights/what-software-defects-really-cost.html",
+      "datePublished": "2026-09-19",
+      "dateModified": "2026-09-19",
+      "inLanguage": "en-ZA",
+      "author": { "@type": "Organization", "name": "Bulan", "url": "https://www.bulan.co.za/" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Bulan",
+        "logo": { "@type": "ImageObject", "url": "https://www.bulan.co.za/assets/img/logo.svg" }
+      },
+      "mainEntityOfPage": "https://www.bulan.co.za/insights/what-software-defects-really-cost.html"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.bulan.co.za/" },
+        { "@type": "ListItem", "position": 2, "name": "Insights", "item": "https://www.bulan.co.za/insights.html" },
+        { "@type": "ListItem", "position": 3, "name": "What software defects really cost", "item": "https://www.bulan.co.za/insights/what-software-defects-really-cost.html" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ============ HEADER ============ -->
+<header class="hdr">
+  <div class="hdr-in">
+    <a class="logo" href="../index.html" aria-label="Bulan — home">
+      <svg class="logo-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
+        <circle cx="16" cy="16" r="15" stroke="rgba(138,169,255,.35)" stroke-width="1.2"/>
+        <path d="M20.9 6.15A11 11 0 1 0 20.9 25.85 13.5 13.5 0 0 1 20.9 6.15Z" fill="#8AA9FF"/>
+      </svg>
+      <span class="logo-word">Bulan</span>
+    </a>
+
+    <nav class="nav" aria-label="Primary">
+      <div class="nav-item">
+        <button class="nav-link" aria-haspopup="true" aria-expanded="false">Services
+          <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="drop">
+          <div class="drop-grid">
+            <a class="drop-link" href="../services/software-development.html">
+              <span class="drop-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+              <span><span class="drop-t">Software Development</span><span class="drop-d">Web, mobile, APIs, cloud and legacy modernisation.</span></span>
+            </a>
+            <a class="drop-link" href="../services/software-testing.html">
+              <span class="drop-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+              <span><span class="drop-t">Software Testing</span><span class="drop-d">Test strategy, automation, performance, accessibility.</span></span>
+            </a>
+            <a class="drop-link" href="../services/cyber-security.html">
+              <span class="drop-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+              <span><span class="drop-t">Cyber Security</span><span class="drop-d">Penetration testing, POPIA readiness, monitoring.</span></span>
+            </a>
+            <a class="drop-link" href="../services/ai-automation.html">
+              <span class="drop-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.1 5.1l2.1 2.1M16.8 16.8l2.1 2.1M18.9 5.1l-2.1 2.1M7.2 16.8l-2.1 2.1"/></svg></span>
+              <span><span class="drop-t">AI &amp; Automation</span><span class="drop-d">Process automation, copilots, document intelligence.</span></span>
+            </a>
+          </div>
+          <div class="drop-foot">
+            <span class="small muted">Not sure where to start? Book a free 30-minute technical call.</span>
+            <a class="tlink" href="../services.html">All services
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <a class="nav-link" href="../approach.html">How we work</a>
+      <a class="nav-link" href="../industries.html">Industries</a>
+      <a class="nav-link" href="../about.html">About</a>
+      <a class="nav-link" href="../insights.html">Insights</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a class="btn btn-ghost btn-sm" href="../quote.html">Get a quote</a>
+      <a class="btn btn-accent btn-sm" href="../contact.html">Start a brief</a>
+      <button class="burger" aria-expanded="false" aria-controls="mnav" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mnav" id="mnav">
+  <p class="mlabel">Services</p>
+  <div class="sub">
+    <a href="../services/software-development.html">Software Development</a>
+    <a href="../services/software-testing.html">Software Testing &amp; Quality</a>
+    <a href="../services/cyber-security.html">Cyber Security</a>
+    <a href="../services/ai-automation.html">AI &amp; Intelligent Automation</a>
+  </div>
+  <p class="mlabel">Company</p>
+  <a href="../approach.html">How we work</a>
+  <a href="../industries.html">Industries</a>
+  <a href="../about.html">About</a>
+  <a href="../insights.html">Insights</a>
+  <a href="../contact.html">Contact</a>
+  <div class="mnav-cta">
+    <a class="btn btn-ghost btn-block" href="../quote.html">Get an instant quote</a>
+    <a class="btn btn-accent btn-block" href="../contact.html">Start a brief</a>
+  </div>
+</div>
+
+<main id="main">
+<section class="phero">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="container container--narrow hero-in">
+    <nav class="crumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span>/</span><a href="../insights.html">Insights</a><span>/</span><span aria-current="page">The cost of defects</span></nav>
+    <span class="pill pill--accent">Quality</span>
+    <h1 class="mt-24">What software defects really cost.</h1>
+    <p class="lead">"We do not have budget for testing" is one of the most expensive sentences in business software. Here is the arithmetic that makes it so.</p>
+    <p class="meta-row mt-32"><span>9 min read</span><span class="dot"></span><span>Software testing</span><span class="dot"></span><span>September 2026</span></p>
+  </div>
+</section>
+
+<section class="section section--flush-top">
+  <div class="container">
+    <div class="article">
+
+      <p>Every organisation that has ever cut a testing budget did so for a defensible reason. The deadline was immovable. The build had overrun. Testing was the only line item that looked optional, because it is the only one that produces no visible feature.</p>
+
+      <p>The decision looks rational right up until the arithmetic is done properly. It almost never is, because the costs of a defect do not appear on the project's budget line. They appear in support, in operations, in the finance team's manual corrections, and occasionally in a regulator's inbox.</p>
+
+      <h2>The escalation curve</h2>
+
+      <p>The most durable finding in software engineering research is that the cost of fixing a defect rises sharply with how late it is found. The exact multipliers vary with the study, the methodology and the era — anyone quoting a precise universal figure is overselling it — but the direction and rough magnitude are consistent across four decades and across wildly different kinds of organisation.</p>
+
+      <p>The shape looks roughly like this.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Found during</th><th>Relative cost</th><th>What fixing it actually involves</th></tr></thead>
+          <tbody>
+            <tr><td>Requirements &amp; design</td><td>1×</td><td>An afternoon and a conversation. Change a diagram.</td></tr>
+            <tr><td>Development</td><td>~5×</td><td>Rework of code, re-review, re-merge.</td></tr>
+            <tr><td>Independent testing</td><td>~10×</td><td>Code change, retest, regression cycle, release delay.</td></tr>
+            <tr><td>User acceptance</td><td>~15×</td><td>All of the above plus stakeholder time and reputational cost internally.</td></tr>
+            <tr><td>Production</td><td>~30×+</td><td>Hotfix, emergency release, support load, data correction, customer communication, possible reporting obligation.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Treat those multipliers as an order of magnitude rather than a precise measurement. The commercially important point is that the curve is steep and it never bends the other way.</p>
+
+      <h2>Working through a real-shaped example</h2>
+
+      <p>Consider a mid-sized South African business building a customer portal. Budget R850 000, six months, an internal team plus a contractor. Testing was scoped at R120 000 and was cut to R30 000 in month four to recover time lost to an integration that took longer than expected.</p>
+
+      <p>That saved R90 000. Here is what the following ninety days cost.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Consequence</th><th>Working</th><th>Cost</th></tr></thead>
+          <tbody>
+            <tr><td>Emergency hotfix releases</td><td>4 releases × ~R18 000 in developer, review and deployment time</td><td>R72 000</td></tr>
+            <tr><td>Support load</td><td>~340 extra tickets × 22 minutes × loaded hourly cost</td><td>R41 000</td></tr>
+            <tr><td>Manual data correction</td><td>Finance staff correcting mis-posted transactions, 3 weeks part-time</td><td>R38 000</td></tr>
+            <tr><td>Delayed second phase</td><td>Team held on stabilisation for 5 weeks instead of building</td><td>R190 000</td></tr>
+            <tr><td>Customer churn</td><td>Conservative: 1.5% of portal users abandoned during the unstable period</td><td>Not modelled</td></tr>
+            <tr><td><strong>Total, excluding churn</strong></td><td></td><td><strong>R341 000</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>A R90 000 saving produced R341 000 of cost — a net loss of R251 000, before anything is assumed about lost customers. And the delayed phase two, the largest single line, is the one nobody attributes to the testing decision, because by then it reads as a resourcing problem.</p>
+
+      <div class="callout">
+        <h4>The attribution problem</h4>
+        <p>This is why the mistake repeats. The saving is visible, immediate, and credited to the person who made it. The cost is diffuse, delayed, and lands in someone else's budget. Nothing in a typical reporting structure connects the two.</p>
+      </div>
+
+      <h2>The costs that do not appear in any budget</h2>
+
+      <p>The table above only counts what is measurable. Three larger costs usually go unrecorded.</p>
+
+      <p><strong>Fear.</strong> In a codebase without a trustworthy test suite, every change is risky, so every change gets slower. Teams stop refactoring. Small improvements stop happening because nobody wants to be the person who broke checkout. The velocity loss is enormous and completely invisible on any report.</p>
+
+      <p><strong>Attrition.</strong> Good engineers leave systems that are frightening to work on. Replacing a senior developer in South Africa costs somewhere between six and twelve months of salary once recruitment, notice periods and the ramp-up of their replacement are counted.</p>
+
+      <p><strong>Regulatory exposure.</strong> Since POPIA became enforceable, a defect that exposes personal information is no longer just a bug. It is a potentially notifiable incident with statutory deadlines, board visibility and a regulator who can issue an enforcement notice. A broken access-control check is now a compliance event.</p>
+
+      <h2>What a defensible testing budget looks like</h2>
+
+      <p>There is no universal percentage, and firms that quote one are guessing. What is defensible is sizing the investment against what failure would actually cost.</p>
+
+      <ul>
+        <li><strong>Low consequence of failure</strong> — an internal tool, a marketing site, a system with a manual fallback. Automated unit tests, a single exploratory cycle before release, and accept the residual risk consciously.</li>
+        <li><strong>Moderate consequence</strong> — a customer-facing system where downtime is embarrassing but survivable. Test strategy, an automated regression suite on the critical journeys, a performance baseline, and independent testing before major releases.</li>
+        <li><strong>High consequence</strong> — money moves, personal information is processed, or a regulator is interested. Embedded quality engineering from the first sprint, continuous automated regression, performance and security testing, and formal evidence retained for audit.</li>
+      </ul>
+
+      <p>Notice that the variable is <em>consequence</em>, not project size. A small system that moves money deserves more testing than a large internal reporting tool.</p>
+
+      <h2>Where the money is best spent</h2>
+
+      <p>If your budget is genuinely constrained, this is the order that buys the most certainty per rand.</p>
+
+      <ol>
+        <li><strong>A risk workshop, before anything is built.</strong> Two hours identifying what would actually hurt. Cheapest quality intervention that exists, and it redirects every subsequent decision.</li>
+        <li><strong>Automated tests on the critical path only.</strong> Not 90% coverage. The eight journeys that must never break, tested on every commit.</li>
+        <li><strong>One independent exploratory cycle before release.</strong> A person who did not write it, actively trying to break it, for a week. Consistently finds the defects automation never will.</li>
+        <li><strong>A performance baseline.</strong> Cheap to establish, and it turns "the system feels slow" into a number you can act on.</li>
+        <li><strong>Everything else.</strong> Broader automation, accessibility, load testing at scale — valuable, but after the four above.</li>
+      </ol>
+
+      <h2>The counter-argument, taken seriously</h2>
+
+      <p>There is a real case against heavy testing, and it deserves a straight answer rather than dismissal.</p>
+
+      <p>For an early-stage product still searching for a market, the dominant risk is building something nobody wants. Extensive testing of a feature that will be deleted in six weeks is waste. Move fast, keep the blast radius small, accept that things will break, and make sure you can roll back quickly.</p>
+
+      <p>That argument holds precisely until one of three things becomes true: real customers depend on it, real money flows through it, or real personal information is stored in it. Most organisations pass all three thresholds without ever revisiting the decision they made when none of them applied. That is the failure — not the original choice, but never reconsidering it.</p>
+
+      <hr>
+
+      <p class="muted"><em>Bulan's <a href="../services/software-testing.html">testing and quality engineering</a> starts with a R32 000 maturity assessment that tells you where your process leaks and the three cheapest fixes. If the honest answer is that you do not need us yet, that is what the report will say.</em></p>
+
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="grid g-3" data-reveal>
+      <a class="card card-link" href="../services/software-testing.html">
+        <h4>QA maturity assessment</h4>
+        <p class="mt-8">Where your quality process leaks, and the three cheapest fixes ranked by impact.</p>
+        <p class="mono accent mt-16">R32 000</p>
+      </a>
+      <a class="card card-link" href="../insights/popia-compliance-for-south-african-websites.html">
+        <h4>POPIA, properly</h4>
+        <p class="mt-8">The compliance obligations most South African businesses have quietly missed.</p>
+        <p class="tlink mt-16">Read it →</p>
+      </a>
+      <a class="card card-link" href="../quote.html">
+        <h4>Price a test engagement</h4>
+        <p class="mt-8">Build an indicative pro-forma quotation in about ninety seconds.</p>
+        <p class="tlink mt-16">Open the builder →</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section cta-band">
+  <div class="container center">
+    <h2>Find out what is actually wrong with it.</h2>
+    <p class="lead center-x mt-24 mw-52">Send us the system and what worries you. We will tell you which engagement buys you the most certainty for the least money.</p>
+    <div class="row mt-32 jc-center">
+      <a class="btn btn-primary btn-lg" href="../contact.html">Start a brief
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn-ghost btn-lg" href="../services/software-testing.html">Testing services</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="ftr">
+  <div class="container">
+    <div class="ftr-grid">
+      <div class="ftr-brand">
+        <a class="logo" href="../index.html" aria-label="Bulan — home">
+          <svg class="logo-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
+            <circle cx="16" cy="16" r="15" stroke="rgba(138,169,255,.35)" stroke-width="1.2"/>
+            <path d="M20.9 6.15A11 11 0 1 0 20.9 25.85 13.5 13.5 0 0 1 20.9 6.15Z" fill="#8AA9FF"/>
+          </svg>
+          <span class="logo-word">Bulan</span>
+        </a>
+        <p>Build it. Prove it. Defend it. Scale it. A South African engineering studio for software that has to work.</p>
+        <div class="chips">
+          <span class="chip">POPIA aligned</span>
+          <span class="chip">B-BBEE affidavit</span>
+          <span class="chip">NDA on request</span>
+        </div>
+        <div class="soc mt-24">
+          <a href="https://www.linkedin.com/company/bulan" aria-label="Bulan on LinkedIn" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95C20.4 8.75 21 11.2 21 14.4V21h-4v-5.85c0-1.4-.03-3.2-2-3.2-2 0-2.3 1.53-2.3 3.1V21H9z"/></svg>
+          </a>
+          <a href="../contact.html" aria-label="Email Bulan">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="../services/software-development.html">Software Development</a></li>
+          <li><a href="../services/software-testing.html">Software Testing</a></li>
+          <li><a href="../services/cyber-security.html">Cyber Security</a></li>
+          <li><a href="../services/ai-automation.html">AI &amp; Automation</a></li>
+          <li><a href="../services.html">All services</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="../about.html">About Bulan</a></li>
+          <li><a href="../approach.html">How we work</a></li>
+          <li><a href="../industries.html">Industries</a></li>
+          <li><a href="../about.html#careers">Careers</a></li>
+          <li><a href="../insights.html">Insights</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Get started</h4>
+        <ul>
+          <li><a href="../contact.html">Start a brief</a></li>
+          <li><a href="../quote.html">Instant quote</a></li>
+          <li><a href="../approach.html#pricing">Pricing</a></li>
+          <li><a href="../approach.html#engagement">Engagement models</a></li>
+          <li><a href="../contact.html#vendor">Vendor documents</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@bulan.co.za">hello@bulan.co.za</a></li>
+          <li><a href="tel:+270000000000">+27 00 000 0000</a></li>
+          <li><span class="muted fs-15">Johannesburg, South Africa</span></li>
+          <li><span class="muted fs-15">Mon–Fri, 08:00–17:00 SAST</span></li>
+          <li><a href="../legal/vulnerability-disclosure.html">Report a vulnerability</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ftr-bot">
+      <p>© <span data-year>2026</span> Bulan Technologies (Pty) Ltd. All rights reserved.</p>
+      <div class="ftr-legal">
+        <a href="../legal/privacy.html">Privacy &amp; POPIA</a>
+        <a href="../legal/paia.html">PAIA manual</a>
+        <a href="../legal/terms.html">Terms</a>
+        <a href="../legal/cookies.html">Cookies</a>
+        <a href="../legal/vulnerability-disclosure.html">Security</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

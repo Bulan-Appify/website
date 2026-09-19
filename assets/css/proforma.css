@@ -1,0 +1,79 @@
+/* ============================================================
+   BULAN — the printable pro-forma quotation document.
+
+   quote.js builds #proforma-doc and adds .print-doc to <body>
+   just before window.print(). Everything else is hidden so the
+   browser's "Save as PDF" produces a clean A4 document.
+   ============================================================ */
+
+#proforma-doc { display: none; }
+
+@media print {
+  @page { size: A4; margin: 16mm 14mm; }
+  body.print-doc > * { display: none !important; }
+  body.print-doc #proforma-doc { display: block !important; }
+  body.print-doc { background: #fff !important; }
+}
+
+#proforma-doc .pf {
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #10151F;
+  background: #fff;
+  font-size: 10.5pt;
+  line-height: 1.5;
+}
+#proforma-doc h1 { font-size: 17pt; letter-spacing: -.02em; margin: 0 0 10px; font-weight: 600; }
+#proforma-doc h2 {
+  font-size: 9pt; letter-spacing: .14em; text-transform: uppercase;
+  color: #6B7688; margin: 0 0 8px; font-weight: 600;
+}
+#proforma-doc p { margin: 0 0 3px; }
+
+#proforma-doc .pf-head {
+  display: flex; justify-content: space-between; gap: 28px;
+  border-bottom: 2px solid #10151F; padding-bottom: 16px; margin-bottom: 22px;
+}
+#proforma-doc .pf-logo {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 14pt; font-weight: 650; letter-spacing: .01em; margin-bottom: 9px;
+}
+#proforma-doc .pf-small { font-size: 8.5pt; color: #5A6474; margin: 0 0 2px; }
+#proforma-doc .pf-r { text-align: right; }
+
+#proforma-doc .pf-meta { border-collapse: collapse; margin-left: auto; font-size: 9pt; }
+#proforma-doc .pf-meta th { text-align: right; padding: 2px 12px 2px 0; color: #6B7688; font-weight: 500; }
+#proforma-doc .pf-meta td { text-align: right; padding: 2px 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+#proforma-doc .pf-to { margin-bottom: 22px; }
+
+#proforma-doc .pf-items { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+#proforma-doc .pf-items thead th {
+  font-size: 8.5pt; letter-spacing: .1em; text-transform: uppercase; color: #6B7688;
+  border-bottom: 1px solid #C9D0DB; padding: 0 0 8px; text-align: left; font-weight: 600;
+}
+#proforma-doc .pf-items thead th.pf-r { text-align: right; }
+#proforma-doc .pf-items td { padding: 11px 0; border-bottom: 1px solid #E6EAF0; vertical-align: top; }
+#proforma-doc .pf-items td.pf-r { font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 24px; }
+#proforma-doc .pf-note { font-size: 8.5pt; color: #6B7688; }
+#proforma-doc .pf-items tfoot th { padding: 8px 24px 8px 0; font-weight: 500; color: #5A6474; }
+#proforma-doc .pf-items tfoot td { padding: 8px 0; font-variant-numeric: tabular-nums; }
+#proforma-doc .pf-items tfoot .pf-total th,
+#proforma-doc .pf-items tfoot .pf-total td {
+  font-size: 13pt; font-weight: 700; color: #10151F;
+  border-top: 2px solid #10151F; padding-top: 11px;
+}
+
+#proforma-doc .pf-block { margin-bottom: 20px; break-inside: avoid; }
+#proforma-doc .pf-block ul { margin: 0; padding-left: 16px; list-style: disc; }
+#proforma-doc .pf-block li { margin-bottom: 4px; font-size: 9.5pt; }
+
+#proforma-doc .pf-bank { border-collapse: collapse; font-size: 9.5pt; }
+#proforma-doc .pf-bank th { text-align: left; padding: 3px 20px 3px 0; color: #6B7688; font-weight: 500; }
+
+#proforma-doc .pf-disclaimer p { font-size: 8.5pt; color: #5A6474; margin-bottom: 6px; }
+
+#proforma-doc .pf-foot {
+  display: flex; justify-content: space-between;
+  border-top: 1px solid #C9D0DB; padding-top: 10px; margin-top: 26px;
+  font-size: 8pt; color: #6B7688;
+}

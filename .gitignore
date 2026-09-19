@@ -1,0 +1,12 @@
+# OS / editor cruft
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Never commit real secrets. If you later add a form backend key or an
+# analytics token, put it in an untracked file rather than config.js.
+.env
+.env.*

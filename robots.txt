@@ -1,0 +1,15 @@
+# ── STAGING ─────────────────────────────────────────────────────────────
+# The site is not finished: founder bios, registration number, contact
+# details and legal dates are still placeholders. Crawling is blocked so
+# none of that gets indexed against the Bulan name.
+#
+# BEFORE LAUNCH: delete this block and uncomment the live rules below.
+User-agent: *
+Disallow: /
+# ────────────────────────────────────────────────────────────────────────
+
+# ── LIVE (uncomment at launch) ──────────────────────────────────────────
+# User-agent: *
+# Allow: /
+#
+# Sitemap: https://www.bulan.co.za/sitemap.xml
