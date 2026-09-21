@@ -33,7 +33,9 @@
       "@type": "AboutPage",
       "name": "About Bulan",
       "url": "https://www.bulan.co.za/about.html",
-      "about": { "@id": "https://www.bulan.co.za/#org" }
+      "about": {
+        "@id": "https://www.bulan.co.za/#org"
+      }
     },
     {
       "@type": "Organization",
@@ -42,17 +44,33 @@
       "legalName": "Bulan Technologies (Pty) Ltd",
       "url": "https://www.bulan.co.za/",
       "foundingDate": "2026",
-      "foundingLocation": { "@type": "Place", "address": { "@type": "PostalAddress", "addressLocality": "Johannesburg", "addressCountry": "ZA" } },
-      "founder": [{ "@id": "https://www.bulan.co.za/about.html#pule" }]
+      "foundingLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Johannesburg",
+          "addressCountry": "ZA"
+        }
+      },
+      "founder": [
+        {
+          "@id": "https://www.bulan.co.za/about.html#motlalepula"
+        },
+        {
+          "@id": "https://www.bulan.co.za/about.html#dennis"
+        }
+      ]
     },
     {
       "@type": "Person",
-      "@id": "https://www.bulan.co.za/about.html#pule",
-      "name": "Pule Mojatau",
+      "@id": "https://www.bulan.co.za/about.html#motlalepula",
+      "name": "Motlalepula Mojatau",
       "givenName": "Motlalepula",
       "familyName": "Mojatau",
       "jobTitle": "Co-founder, Engineering",
-      "worksFor": { "@id": "https://www.bulan.co.za/#org" },
+      "worksFor": {
+        "@id": "https://www.bulan.co.za/#org"
+      },
       "alumniOf": {
         "@type": "CollegeOrUniversity",
         "name": "University of Johannesburg",
@@ -72,27 +90,82 @@
           "@type": "EducationalOccupationalCredential",
           "credentialCategory": "degree",
           "name": "BSc Information Technology (Computer Science and Informatics)",
-          "recognizedBy": { "@type": "CollegeOrUniversity", "name": "University of Johannesburg" }
+          "recognizedBy": {
+            "@type": "CollegeOrUniversity",
+            "name": "University of Johannesburg"
+          }
         },
         {
           "@type": "EducationalOccupationalCredential",
           "credentialCategory": "certification",
           "name": "CompTIA Security+ (SY0-701)",
-          "recognizedBy": { "@type": "Organization", "name": "CompTIA" }
+          "recognizedBy": {
+            "@type": "Organization",
+            "name": "CompTIA"
+          }
         },
         {
           "@type": "EducationalOccupationalCredential",
           "credentialCategory": "certification",
           "name": "Microsoft SC-900: Security, Compliance and Identity Fundamentals",
-          "recognizedBy": { "@type": "Organization", "name": "Microsoft" }
+          "recognizedBy": {
+            "@type": "Organization",
+            "name": "Microsoft"
+          }
         }
       ]
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.bulan.co.za/" },
-        { "@type": "ListItem", "position": 2, "name": "About", "item": "https://www.bulan.co.za/about.html" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.bulan.co.za/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About",
+          "item": "https://www.bulan.co.za/about.html"
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://www.bulan.co.za/about.html#dennis",
+      "name": "Dennis Mosehla",
+      "givenName": "Dennis",
+      "familyName": "Mosehla",
+      "jobTitle": "Co-founder, Security and Architecture",
+      "worksFor": {
+        "@id": "https://www.bulan.co.za/#org"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "University of Johannesburg",
+        "sameAs": "https://www.uj.ac.za/"
+      },
+      "knowsAbout": [
+        "System architecture",
+        "Penetration testing",
+        "Web and mobile application security",
+        "Vulnerability research",
+        "Secure API development",
+        "Cloud infrastructure",
+        "Linux system administration"
+      ],
+      "hasCredential": [
+        {
+          "@type": "EducationalOccupationalCredential",
+          "credentialCategory": "degree",
+          "name": "BSc Computer Science and Informatics",
+          "recognizedBy": {
+            "@type": "CollegeOrUniversity",
+            "name": "University of Johannesburg"
+          }
+        }
       ]
     }
   ]
@@ -224,8 +297,9 @@
 
 <!-- ============================================================
      FOUNDERS
-     Founder one is real, sourced from a CV. Founder two is still a
-     placeholder — replace when the second CV arrives.
+     Both founders are real, drawn from their CVs. Every claim here
+     must stay checkable: if it cannot be verified by a client, a
+     procurement officer or an app store listing, it does not belong.
 
      REGISTER: these are founder bios, not CV entries. Establish
      authority, not duties. "Leads engineering" not "gathers
@@ -238,10 +312,11 @@
          chancers write, so do not drift into adjectives either.
        - Never overstate to fill the altitude. "Permanent, contract and
          freelance" is accurate; "a decade across the industry" is not.
-       - Name only credentials actually held, exactly as awarded. The
-         degree is BSc Information Technology — it is NOT a cyber
-         security degree. The security credentials are the CompTIA and
-         Microsoft certifications. Keep those two facts distinct.
+       - Name only credentials actually held, exactly as awarded, and
+         always with the issuing body. Neither degree is a cyber
+         security degree; the security credentials are separate and
+         must stay separate. A course completion is not an accredited
+         certification — do not let the list blur the two.
        - Mark anything unfinished "in progress".
        - No framework lists. The service pages carry the stack.
        - No year counts. The homepage already states we were founded in
@@ -262,7 +337,7 @@
 
       <div class="card">
         <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
-        <h3>Pule Mojatau</h3>
+        <h3>Motlalepula Mojatau</h3>
         <p class="mono accent mt-8">Co-founder · Engineering</p>
 
         <p class="mt-16">Leads engineering at Bulan — architecture, delivery, and the technical decisions a client ends up living with long after we have gone.</p>
@@ -277,7 +352,6 @@
             <li>BSc Information Technology (Computer Science &amp; Informatics), University of Johannesburg</li>
             <li>CompTIA Security+ (SY0-701)</li>
             <li>Microsoft SC-900 — Security, Compliance &amp; Identity Fundamentals</li>
-            <li>ISC2 Certified in Cybersecurity — in progress</li>
           </ul>
           <div class="row mt-24">
             <a class="tlink" href="#"><span class="tbc">[LinkedIn URL]</span>
@@ -287,26 +361,32 @@
         </div>
       </div>
 
-      <!-- CO-FOUNDER — replace everything marked below when the CV arrives.
-           Read the REGISTER note at the top of this section first. Mirror
-           the card above: what they are accountable for, where the
-           experience comes from at altitude, then qualifications held. -->
       <div class="card">
-        <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-        <h3><span class="tbc">[Co-founder — full name]</span></h3>
-        <p class="mono accent mt-8">Co-founder · <span class="tbc">[Discipline]</span></p>
+        <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+        <h3>Dennis Mosehla</h3>
+        <p class="mono accent mt-8">Co-founder · Security &amp; Architecture</p>
 
-        <p class="mt-16"><span class="tbc">[What they are accountable for at Bulan. One sentence, in terms of what a client gets — not a job title description.]</span></p>
+        <p class="mt-16">Owns security and system architecture at Bulan — how a system is designed, how it behaves under load, and what happens to it when somebody sets out to break it.</p>
 
-        <p class="mt-16"><span class="tbc">[Where the experience comes from, at altitude: types of engagement and the sectors. Name the stakes in that sector rather than the duties. Founding and shipping Go Learn belongs here.]</span></p>
+        <p class="mt-16">He has taken systems from architecture through to the app stores across healthcare, education and consumer products, and still runs several of them in production. His current work leads a cross-platform telehealth build handling patient and clinician consultation, real-time communication and recurring payments — where personal health information, uptime and privacy are all non-negotiable at once.</p>
 
-        <p class="mt-16"><span class="tbc">[One sentence on how that shapes the way they work. This is where character shows.]</span></p>
+        <p class="mt-16">His security work runs in the other direction: penetration testing of web and mobile applications, vulnerability research, and tooling he wrote himself for enumeration, cross-site scripting discovery and network interception. That matters to a client for one reason — he designs systems already knowing how they will be attacked.</p>
 
         <div class="card-foot">
           <p class="mono faint mb-16">QUALIFICATIONS</p>
           <ul class="checks">
-            <li><span class="tbc">[Degree, institution — exactly as awarded]</span></li>
-            <li><span class="tbc">[Certifications actually held. If none yet, delete this line rather than softening it.]</span></li>
+            <li>BSc Computer Science &amp; Informatics, University of Johannesburg</li>
+            <!-- ►► Each certification below MUST name its issuing body before this
+                 page goes live. A course-completion certificate and an accredited
+                 industry certification are different things, and a procurement
+                 officer evaluating a R65 000+ penetration test will ask which it
+                 is. If any of these are course completions, either name the
+                 provider plainly or move the line under a "Training" heading —
+                 do not leave it looking like an accreditation it is not. -->
+            <li>Penetration Testing &amp; Ethical Hacking — <span class="tbc">[issuing body]</span></li>
+            <li>Bug Bounty &amp; Web Application Security — <span class="tbc">[issuing body]</span></li>
+            <li>Social Engineering — <span class="tbc">[issuing body]</span></li>
+            <li>Linux System Administration — <span class="tbc">[issuing body]</span></li>
           </ul>
           <div class="row mt-24">
             <a class="tlink" href="#"><span class="tbc">[LinkedIn URL]</span>
@@ -319,20 +399,27 @@
     </div>
 
     <!-- Shared track record. The first genuinely verifiable proof on the
-         site — a real product, in production, that anyone can download.
-         This is what answers "are these two chancers?", so it carries
-         more weight than anything written in the bios above. -->
+         site — real products, in production, that anyone can download.
+         This answers "are these two chancers?" better than any bio can.
+
+         ►► CONFIRM THE DOWNLOAD FIGURES from the Play Console and App
+         Store Connect before launch. The two CVs this was drawn from
+         quote different things: one gives ~4 500 active users, the other
+         13k+ Android and 5k+ iOS downloads. Both can be true — downloads
+         and active users are different metrics — but the page must state
+         which is which, and both numbers must be current. -->
     <div class="card pad-lg mt-48" data-reveal>
       <div class="split ai-center">
         <div>
           <p class="eyebrow eyebrow--signal">Built before Bulan</p>
-          <h3>Go Learn — 4 500+ students, live on both app stores.</h3>
-          <p class="muted mt-16">Before Bulan existed, the two of us took a consumer education platform from an idea to a product in the hands of real users: apps on iOS and Android, a backend we built and still run on AWS, live payment integrations through PayFast, Ozow and OTT Voucher, and AI-generated explanations of past exam papers. It helps South African students with university applications, bursaries and career guidance.</p>
-          <p class="muted mt-16">It is running right now — roughly 3 000 Android and 1 500 iOS users — and you can download it and check. It is not a Bulan client project and we will not dress it up as one. It is simply the plainest evidence we can offer that we finish what we start, ship it to people who depend on it, and keep it standing afterwards.</p>
+          <h3>Go Learn — 18 000+ downloads, live on both app stores.</h3>
+          <p class="muted mt-16">Dennis founded it and Motlalepula built alongside him: a consumer education platform taken from an idea to a product in the hands of real users. Apps on iOS and Android, a backend we built and still run ourselves, live payment integrations through PayFast, Ozow and OTT Voucher, and AI-generated explanations of past exam papers. It helps South African students with university applications, bursaries and career guidance.</p>
+          <p class="muted mt-16">More than 13 000 downloads on Android and 5 000 on iOS, with several thousand students using it actively. It is running right now, and you can download it and check — which is the point. It is not a Bulan client project and we will not dress it up as one. It is simply the plainest evidence we can offer that we finish what we start, ship it to people who depend on it, and keep it standing afterwards.</p>
+          <p class="muted mt-16">It is not the only one. Between us we have also shipped <strong class="t-strong">Family Xchange</strong>, a financial education app for children, and a real-time booking platform with tokenised card payments and live geolocation — both to the same two stores, both through the same review and update cycles.</p>
         </div>
         <div>
           <ul class="checks checks--signal">
-            <li><strong class="t-strong">Shipped to both stores</strong> — reviewed, approved and maintained through update cycles</li>
+            <li><strong class="t-strong">Shipped to both stores, repeatedly</strong> — reviewed, approved and maintained through update cycles</li>
             <li><strong class="t-strong">Real money moves through it</strong> — PayFast, Ozow and OTT Voucher, handling subscriptions and wallet funding</li>
             <li><strong class="t-strong">AI in production</strong> — used by students daily, not a demo in a pitch deck</li>
             <li><strong class="t-strong">Run, not just built</strong> — we still own the uptime, the security and the performance</li>
@@ -344,7 +431,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </section>
 
