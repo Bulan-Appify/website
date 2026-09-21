@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>About Bulan | A South African engineering studio</title>
-<meta name="description" content="Bulan is a founder-led South African engineering studio building, testing, securing and automating business-critical software. Who we are, what we believe, and how we hire.">
+<meta name="description" content="Bulan is a founder-led South African engineering studio building, testing, securing and automating business-critical software. Meet the founders, what we believe, and how we hire.">
 <link rel="canonical" href="https://www.bulan.co.za/about.html">
-<!-- STAGING ONLY — delete these two lines before launch. See README §2.4. -->
+<!-- STAGING ONLY — delete these two lines before launch. See README §2.3. -->
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#05070B">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
@@ -18,13 +18,81 @@
 <meta property="og:locale" content="en_ZA">
 <meta property="og:url" content="https://www.bulan.co.za/about.html">
 <meta property="og:title" content="About Bulan">
-<meta property="og:description" content="Bulan is a founder-led South African engineering studio building, testing, securing and automating business-critical software. Who we are, what we believe, and how we hire.">
+<meta property="og:description" content="Bulan is a founder-led South African engineering studio building, testing, securing and automating business-critical software. Meet the founders, what we believe, and how we hire.">
 <meta property="og:image" content="https://www.bulan.co.za/assets/img/og.png">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="stylesheet" href="assets/css/main.css">
 <link rel="stylesheet" href="assets/css/forms.css">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "name": "About Bulan",
+      "url": "https://www.bulan.co.za/about.html",
+      "about": { "@id": "https://www.bulan.co.za/#org" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.bulan.co.za/#org",
+      "name": "Bulan",
+      "legalName": "Bulan Technologies (Pty) Ltd",
+      "url": "https://www.bulan.co.za/",
+      "foundingDate": "2026",
+      "foundingLocation": { "@type": "Place", "address": { "@type": "PostalAddress", "addressLocality": "Johannesburg", "addressCountry": "ZA" } },
+      "founder": [{ "@id": "https://www.bulan.co.za/about.html#pule" }]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://www.bulan.co.za/about.html#pule",
+      "name": "Pule Mojatau",
+      "givenName": "Motlalepula",
+      "familyName": "Mojatau",
+      "jobTitle": "Co-founder, Engineering",
+      "worksFor": { "@id": "https://www.bulan.co.za/#org" },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "University of Johannesburg",
+        "sameAs": "https://www.uj.ac.za/"
+      },
+      "knowsAbout": [
+        "Java Spring Boot", "React", "Node.js", "Flutter",
+        "PostgreSQL", "REST API design", "AWS", "Secure coding", "Identity and access management"
+      ],
+      "hasCredential": [
+        {
+          "@type": "EducationalOccupationalCredential",
+          "credentialCategory": "degree",
+          "name": "BSc Information Technology (Computer Science and Informatics)",
+          "recognizedBy": { "@type": "CollegeOrUniversity", "name": "University of Johannesburg" }
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "credentialCategory": "certification",
+          "name": "CompTIA Security+ (SY0-701)",
+          "recognizedBy": { "@type": "Organization", "name": "CompTIA" }
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "credentialCategory": "certification",
+          "name": "Microsoft SC-900: Security, Compliance and Identity Fundamentals",
+          "recognizedBy": { "@type": "Organization", "name": "Microsoft" }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.bulan.co.za/" },
+        { "@type": "ListItem", "position": 2, "name": "About", "item": "https://www.bulan.co.za/about.html" }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -150,38 +218,100 @@
 </section>
 
 <!-- ============================================================
-     FOUNDERS — ►► REPLACE THE PLACEHOLDER TEXT BELOW ◄◄
-     Real names, real roles, real backgrounds. A LinkedIn link on
-     each founder is the single highest-value trust signal a new
-     firm can add to its website. Add a photo when you have one.
+     FOUNDERS
+     Founder one is real, sourced from a CV. Founder two is still a
+     placeholder — replace when the second CV arrives.
+     Rules: name only credentials actually held, and link somewhere the
+     claim can be checked. A LinkedIn URL is the single highest-value
+     trust signal a new firm can put on its website.
      ============================================================ -->
 <section class="section" id="founders">
   <div class="container">
     <div class="sec-head" data-reveal>
       <p class="eyebrow">Founders</p>
       <h2>The people who will actually be on your project.</h2>
-      <p class="lead">There is no separate pitch team. If you meet us in the first conversation, you are meeting the people doing the work.</p>
+      <p class="lead">There is no separate pitch team. If you meet us in the first conversation, you are meeting the people who will do the work.</p>
     </div>
+
     <div class="grid g-2" data-reveal>
+
       <div class="card">
-        <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-        <h3><span class="tbc">[Founder one — full name]</span></h3>
-        <p class="mono accent mt-8">Co-founder · <span class="tbc">[Role, e.g. Engineering]</span></p>
-        <p class="mt-16"><span class="tbc">[Two or three sentences: years in the industry, the kinds of systems worked on, the sectors, any qualification or certification that is genuinely held. Be specific — "eight years building payment integrations for South African banks" beats "passionate about technology" every single time.]</span></p>
+        <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+        <h3>Pule Mojatau</h3>
+        <p class="mono accent mt-8">Co-founder · Engineering</p>
+        <p class="mt-16">Three years building production systems in Java Spring Boot, React, Node.js and Flutter. Currently owns features end to end on a live loan management platform — sitting with business users to document what they actually do, breaking that into tickets, then building, testing and deploying it.</p>
+        <p class="mt-16">The useful part of that work is the unglamorous part: correcting interest and fee calculation logic, fixing credit assessment failures on high-value applications, and clearing duplicate customer records out of a live financial system. Software where being wrong costs somebody money.</p>
+        <p class="mt-16">Core developer on <strong class="t-strong">Go Learn</strong>, an education platform now serving more than 4 500 students on Google Play and the App Store. Built the Node.js backend and ran it on AWS, integrated PayFast, Ozow and the OpenAI API, and owned production stability.</p>
         <div class="card-foot">
-          <a class="tlink" href="#"><span class="tbc">[LinkedIn profile URL]</span></a>
+          <p class="mono faint mb-16">CREDENTIALS</p>
+          <ul class="checks">
+            <li>BSc Information Technology (Computer Science &amp; Informatics), University of Johannesburg</li>
+            <li>CompTIA Security+ (SY0-701)</li>
+            <li>Microsoft SC-900 — Security, Compliance &amp; Identity Fundamentals</li>
+            <li>ISC2 Certified in Cybersecurity — in progress</li>
+          </ul>
+          <div class="row mt-24">
+            <a class="tlink" href="#"><span class="tbc">[LinkedIn URL]</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="tlink" href="#"><span class="tbc">[GitHub URL]</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
         </div>
       </div>
+
+      <!-- CO-FOUNDER — replace everything marked below when the CV arrives.
+           Mirror the card above: what they build, one specific thing they
+           shipped or fixed, then credentials actually held. -->
       <div class="card">
         <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-        <h3><span class="tbc">[Founder two — full name]</span></h3>
-        <p class="mono accent mt-8">Co-founder · <span class="tbc">[Role, e.g. Security &amp; Quality]</span></p>
-        <p class="mt-16"><span class="tbc">[Same again. If either of you holds a certification — ISTQB, OSCP, CISSP, AWS or Azure certifications, a relevant degree — name it here. If you do not hold one yet, say nothing rather than implying it.]</span></p>
+        <h3><span class="tbc">[Co-founder — full name]</span></h3>
+        <p class="mono accent mt-8">Co-founder · <span class="tbc">[Discipline]</span></p>
+        <p class="mt-16"><span class="tbc">[Years, and the kinds of systems built. Be specific — "founded an education platform and shipped it to both app stores" beats "passionate about technology" every time.]</span></p>
+        <p class="mt-16"><span class="tbc">[One concrete thing shipped or fixed, with a number attached if there is one.]</span></p>
+        <p class="mt-16"><span class="tbc">[Founder of Go Learn — worth stating plainly, since it is the strongest shared credential the two of you have.]</span></p>
         <div class="card-foot">
-          <a class="tlink" href="#"><span class="tbc">[LinkedIn profile URL]</span></a>
+          <p class="mono faint mb-16">CREDENTIALS</p>
+          <ul class="checks">
+            <li><span class="tbc">[Degree, institution]</span></li>
+            <li><span class="tbc">[Certifications actually held — name them exactly. If none yet, delete this line rather than softening it.]</span></li>
+          </ul>
+          <div class="row mt-24">
+            <a class="tlink" href="#"><span class="tbc">[LinkedIn URL]</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Shared track record. The first genuinely verifiable proof on the
+         site — a real product, in production, that anyone can download. -->
+    <div class="card pad-lg mt-48" data-reveal>
+      <div class="split ai-center">
+        <div>
+          <p class="eyebrow eyebrow--signal">Built before Bulan</p>
+          <h3>Go Learn — 4 500+ students, live on both app stores.</h3>
+          <p class="muted mt-16">Before Bulan existed, the two of us shipped a consumer education platform end to end: Flutter apps on iOS and Android, a Node.js and MySQL backend on AWS, PayFast, Ozow and OTT Voucher payment integrations, and AI-generated explanations of past exam papers through the OpenAI API. It helps South African students with university applications, bursaries and career guidance, and it is running right now — roughly 3 000 Android and 1 500 iOS users.</p>
+          <p class="muted mt-16">It is not a Bulan client project and we will not present it as one. It is simply the clearest evidence we can offer that we finish things, ship them to real users, and keep them running afterwards.</p>
+        </div>
+        <div>
+          <ul class="checks checks--signal">
+            <li><strong class="t-strong">Shipped to both stores</strong> — reviewed, approved, and maintained through update cycles</li>
+            <li><strong class="t-strong">Real payments</strong> — PayFast, Ozow and OTT Voucher, handling subscriptions and wallet funding</li>
+            <li><strong class="t-strong">Production AI</strong> — OpenAI integration used by students daily, not a demo</li>
+            <li><strong class="t-strong">Run, not just built</strong> — AWS and Linux backend, API security, performance and uptime</li>
+          </ul>
+          <div class="row mt-24">
+            <a class="btn btn-ghost btn-sm" href="#"><span class="tbc">[Google Play URL]</span></a>
+            <a class="btn btn-ghost btn-sm" href="#"><span class="tbc">[App Store URL]</span></a>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </section>
 
