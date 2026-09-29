@@ -854,3 +854,38 @@ p  { text-wrap: pretty; }
   background: #FFFFFF;
   box-shadow: 0 2px 6px rgba(11,18,32,.05), 0 18px 44px rgba(11,18,32,.09);
 }
+
+/* ============================================================
+   20. MUTED BAND
+   A lifted dark slate rather than a full light flip. Used where
+   the section already contains bright imagery: jumping the whole
+   band to near-white makes the page flash, and it puts the
+   background in competition with the screenshots. Here the band
+   stays dark and the product shots are the brightest thing in it.
+   ============================================================ */
+.section--muted {
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(138,169,255,.09), transparent 62%),
+    linear-gradient(180deg, #0A0F19, #10192A 52%, #0A0F19);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Brightness is contained in a panel instead of flooding the section */
+.shots-panel {
+  background: linear-gradient(180deg, #E8EDF6, #D7E0EF);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--r-xl);
+  padding: clamp(18px, 2.6vw, 30px);
+  box-shadow: 0 2px 0 rgba(255,255,255,.14) inset, 0 34px 80px rgba(0,0,0,.5);
+}
+.shots-panel .shots { margin: 0; }
+.shots-panel .shot { box-shadow: 0 1px 3px rgba(11,18,32,.10), 0 10px 26px rgba(11,18,32,.14); }
+.shots-cap {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; flex-wrap: wrap;
+  margin-top: 18px; padding-top: 16px;
+  border-top: 1px solid rgba(11,18,32,.10);
+  font-size: .8125rem; color: #59677F;
+}
+.shots-cap .mono { font-size: .6875rem; color: #3D5BD9; }
