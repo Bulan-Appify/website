@@ -163,6 +163,58 @@
 
       <p>The shape looks roughly like this.</p>
 
+      <figure class="chart-fig" data-reveal>
+        <figcaption class="chart-cap">
+          <span class="eyebrow">The escalation curve</span>
+          <strong>What the same defect costs, by the stage you find it</strong>
+          <span class="muted">Relative to catching it in requirements and design. Treat these as orders of magnitude, not measurements — the exact multipliers vary by study. The direction has not varied in forty years.</span>
+        </figcaption>
+        <svg class="chart" viewBox="0 0 680 300" role="img" aria-label="Relative cost of fixing a software defect by the stage it is found. Requirements and design 1 times, development 5 times, independent testing 10 times, user acceptance 15 times, production 30 times or more.">
+        <line class="c-grid" x1="325.3" y1="14" x2="325.3" y2="240"/>
+        <text class="c-axis" x="325.3" y="260" text-anchor="middle">10×</text>
+        <line class="c-grid" x1="468.7" y1="14" x2="468.7" y2="240"/>
+        <text class="c-axis" x="468.7" y="260" text-anchor="middle">20×</text>
+        <line class="c-grid" x1="612.0" y1="14" x2="612.0" y2="240"/>
+        <text class="c-axis" x="612.0" y="260" text-anchor="middle">30×</text>
+        <line class="c-base" x1="182" y1="14" x2="182" y2="240"/>
+        <g class="c-row">
+        <title>Requirements and design — roughly 1× the cost of catching it in design. An afternoon and a conversation. Change a diagram.</title>
+        <rect class="c-hit" x="0" y="16" width="680" height="44"/>
+        <text class="c-label" x="168" y="37.5" text-anchor="end">Requirements &amp; design</text>
+        <path class="c-bar" d="M182.0 22.0 h10.3 a4 4 0 0 1 4 4 v14.0 a4 4 0 0 1 -4 4 h-10.3 Z" fill="#465B96"/>
+        <text class="c-val" x="205.3" y="37.5">1×</text>
+        </g>
+        <g class="c-row">
+        <title>Development — roughly 5× the cost of catching it in design. Rework of code, re-review, re-merge.</title>
+        <rect class="c-hit" x="0" y="62" width="680" height="44"/>
+        <text class="c-label" x="168" y="83.5" text-anchor="end">Development</text>
+        <path class="c-bar" d="M182.0 68.0 h67.7 a4 4 0 0 1 4 4 v14.0 a4 4 0 0 1 -4 4 h-67.7 Z" fill="#5C79C0"/>
+        <text class="c-val" x="262.7" y="83.5">5×</text>
+        </g>
+        <g class="c-row">
+        <title>Independent testing — roughly 10× the cost of catching it in design. Code change, retest, regression cycle, release delay.</title>
+        <rect class="c-hit" x="0" y="108" width="680" height="44"/>
+        <text class="c-label" x="168" y="129.5" text-anchor="end">Independent testing</text>
+        <path class="c-bar" d="M182.0 114.0 h139.3 a4 4 0 0 1 4 4 v14.0 a4 4 0 0 1 -4 4 h-139.3 Z" fill="#7191E2"/>
+        <text class="c-val" x="334.3" y="129.5">10×</text>
+        </g>
+        <g class="c-row">
+        <title>User acceptance — roughly 15× the cost of catching it in design. All of the above plus stakeholder time.</title>
+        <rect class="c-hit" x="0" y="154" width="680" height="44"/>
+        <text class="c-label" x="168" y="175.5" text-anchor="end">User acceptance</text>
+        <path class="c-bar" d="M182.0 160.0 h211.0 a4 4 0 0 1 4 4 v14.0 a4 4 0 0 1 -4 4 h-211.0 Z" fill="#8DA9F6"/>
+        <text class="c-val" x="406.0" y="175.5">15×</text>
+        </g>
+        <g class="c-row">
+        <title>Production — roughly 30× the cost of catching it in design. Hotfix, emergency release, support load, data correction, customer comms.</title>
+        <rect class="c-hit" x="0" y="200" width="680" height="44"/>
+        <text class="c-label" x="168" y="221.5" text-anchor="end">Production</text>
+        <path class="c-bar" d="M182.0 206.0 h426.0 a4 4 0 0 1 4 4 v14.0 a4 4 0 0 1 -4 4 h-426.0 Z" fill="#AAC2FF"/>
+        <text class="c-val" x="621.0" y="221.5">30×</text>
+        </g>
+        </svg>
+      </figure>
+
       <div class="table-wrap">
         <table>
           <thead><tr><th>Found during</th><th>Relative cost</th><th>What fixing it actually involves</th></tr></thead>

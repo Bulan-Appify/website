@@ -792,3 +792,65 @@ p  { text-wrap: pretty; }
 .panel-foot .mono { font-size: .6875rem; color: var(--accent); }
 
 @media (prefers-reduced-motion: reduce) { .prow-s--live::before { animation: none; } }
+
+/* ============================================================
+   19. SERVICE ARTWORK
+   Abstract technical diagrams, one per discipline. Drawn with
+   classed elements rather than hardcoded colours so they re-tint
+   automatically inside a .section--light band.
+   ============================================================ */
+.card--art { padding: 0; overflow: hidden; }
+.art {
+  position: relative;
+  padding: 26px 24px 0;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(120% 150% at 18% -10%, rgba(138,169,255,.13), transparent 62%),
+    linear-gradient(180deg, rgba(255,255,255,.028), transparent);
+}
+.section--light .art {
+  background:
+    radial-gradient(120% 150% at 18% -10%, rgba(61,91,217,.10), transparent 62%),
+    linear-gradient(180deg, rgba(11,18,32,.03), transparent);
+}
+.art::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: radial-gradient(ellipse 80% 90% at 30% 10%, #000, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 90% at 30% 10%, #000, transparent 72%);
+  opacity: .55;
+}
+.art-svg { position: relative; z-index: 1; display: block; width: 100%; height: auto; }
+.art-svg .ln  { stroke: var(--line-2); fill: none; stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+.art-svg .ac  { stroke: var(--accent);  fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.art-svg .sg  { stroke: var(--signal);  fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.art-svg .acf { fill: var(--accent); opacity: .14; }
+.art-svg .sgf { fill: var(--signal); opacity: .16; }
+.art-svg .nd  { fill: var(--accent); }
+.art-svg .nq  { fill: var(--line-2); }
+.art-svg .fade{ opacity: .4; }
+
+.art-body { padding: clamp(22px, 2.6vw, 30px); }
+.art-body .checks { margin-top: 22px; }
+
+/* The lit element drifts, so each card has a little life without noise */
+.art-pulse { animation: artFloat 5.5s var(--ease) infinite; transform-origin: center; }
+@keyframes artFloat { 0%,100% { opacity: .95; } 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .art-pulse { animation: none; } }
+
+/* Diagram presented on its own, outside a service card */
+.art-card {
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  background: linear-gradient(165deg, rgba(22,31,48,.92), rgba(10,14,21,.92));
+  box-shadow: var(--shadow-lg);
+}
+.art-card .art { border-bottom: 0; padding: 30px 28px 26px; }
+.section--light .art-card {
+  background: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(11,18,32,.05), 0 18px 44px rgba(11,18,32,.09);
+}

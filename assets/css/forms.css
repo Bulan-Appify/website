@@ -323,3 +323,45 @@ fieldset + fieldset, .field + fieldset, fieldset + .field { margin-top: 22px; }
   a { color: #111 !important; text-decoration: none !important; }
 }
 .print-only { display: none; }
+
+/* ============================================================
+   CHARTS
+   Text wears text tokens, never the series colour; the fills
+   carry identity on their own. Ramp is validated against the
+   dark article surface — see scratchpad chart.py for the check.
+   ============================================================ */
+.chart-fig {
+  margin-block: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: linear-gradient(170deg, var(--surface-2), var(--surface));
+  padding: clamp(20px, 3vw, 30px);
+}
+.chart-cap { display: block; margin-bottom: 26px; }
+.chart-cap .eyebrow { margin-bottom: 12px; }
+.chart-cap strong { display: block; font-size: 1.0625rem; font-weight: 560; letter-spacing: -0.018em; color: var(--text); }
+.chart-cap .muted { display: block; font-size: .875rem; line-height: 1.55; margin-top: 10px; }
+
+.chart { display: block; width: 100%; height: auto; overflow: visible; }
+.chart .c-grid { stroke: var(--line); stroke-width: 1; }
+.chart .c-base { stroke: var(--line-2); stroke-width: 1; }
+.chart .c-axis  { fill: var(--faint);  font-size: 11px; font-family: var(--mono); letter-spacing: .06em; }
+.chart .c-label { fill: var(--text-2); font-size: 13px; }
+.chart .c-val   { fill: var(--text);   font-size: 13px; font-weight: 560; font-variant-numeric: tabular-nums; }
+.chart .c-hit   { fill: transparent; }
+.chart .c-bar   { transition: opacity .2s var(--ease); }
+
+/* Hover dims the rest so the row you are reading stands out */
+.chart:hover .c-bar { opacity: .42; }
+.chart .c-row:hover .c-bar { opacity: 1; }
+.chart .c-row:hover .c-label,
+.chart .c-row:hover .c-val { fill: var(--text); }
+.chart .c-row { cursor: default; }
+
+@media (max-width: 560px) {
+  .chart .c-label { font-size: 11px; }
+  .chart .c-val   { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chart:hover .c-bar { opacity: 1; }
+}
