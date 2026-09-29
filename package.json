@@ -1,0 +1,19 @@
+{
+  "name": "bulan-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bulan marketing site. The site itself is static and has no build step; this manifest exists only so Netlify can install nodemailer for the contact function.",
+  "scripts": {
+    "serve": "python -m http.server 8000",
+    "dev": "netlify dev",
+    "check": "node --check netlify/functions/contact.js && echo \"contact.js parses\"",
+    "test": "node tests/contact.test.js"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.14"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED"
+}

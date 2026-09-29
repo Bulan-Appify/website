@@ -71,12 +71,15 @@ window.BULAN = {
   ],
 
   /* --- Form handling ------------------------------------- */
-  // Where form submissions go. Three options — see README.md.
-  //  "mailto"   → opens the visitor's email client (works with zero setup)
-  //  "formspree"→ set formEndpoint to your https://formspree.io/f/XXXX URL
-  //  "netlify"  → set to "netlify" if hosting on Netlify (forms are auto-detected)
-  formMode: "mailto",
-  formEndpoint: "", // TODO if using formspree or another POST endpoint
+  // Where form submissions go.
+  //  "endpoint" → POST JSON to formEndpoint. This is the live setup:
+  //               a Netlify function running nodemailer. Credentials
+  //               are environment variables on Netlify, never here.
+  //  "mailto"   → fallback that opens the visitor's own mail client.
+  //               Needs no server; use it if the function is down or
+  //               while testing the site from disk.
+  formMode: "endpoint",
+  formEndpoint: "/.netlify/functions/contact",
 
   /* --- Analytics ----------------------------------------- */
   // Leave empty for none. A privacy-friendly, cookieless option keeps the

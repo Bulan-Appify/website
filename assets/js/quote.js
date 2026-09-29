@@ -440,7 +440,16 @@
     if (auto) {
       window.BULAN_FORM.send($('#qb-details'),
         'Pro-forma generated ' + reference + ' — ' + (d.company || d.name),
-        plainText(q, d));
+        plainText(q, d),
+        { kind: 'quote', reference: reference, quote: plainText(q, d) }
+      ).catch(function () {
+        // The quotation itself is already on screen and downloadable, so a
+        // failed notification must not look like a failed quotation. Fall
+        // back to the manual send instead.
+        $('#qb-sent-auto').hidden = true;
+        $('#qb-send').hidden = false;
+        $('#qb-send-wrap').hidden = false;
+      });
     }
     $('#qb-sent-auto').hidden = !auto;
     $('#qb-send').hidden = auto;

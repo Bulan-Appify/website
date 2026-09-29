@@ -1,0 +1,16 @@
+# Netlify configuration.
+#
+# The site is plain static HTML with no build step — Netlify only needs
+# to install nodemailer so the contact function can run.
+
+[build]
+  publish    = "."
+  command    = "echo 'static site — nothing to build'"
+  functions  = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# _headers and _redirects at the project root are read automatically and
+# remain the source of truth, so the security headers and the tidy URLs
+# live in one place rather than being split across two formats.

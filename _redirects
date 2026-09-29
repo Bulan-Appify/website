@@ -18,5 +18,10 @@
 /cookies                         /legal/cookies.html                   301
 /security                        /legal/vulnerability-disclosure.html  301
 
+# The function source is published alongside the static files. It holds no
+# secrets (credentials are environment variables) but there is no reason to
+# serve it, so hide the directory.
+/netlify/*   /404.html   404
+
 # Catch-all 404
 /*   /404.html   404

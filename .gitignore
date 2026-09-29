@@ -1,3 +1,13 @@
+# Secrets — never commit. Real SMTP values live in Netlify's
+# environment variables; .env is for local `netlify dev` only.
+.env
+.env.*
+!.env.example
+
+# Dependencies and build caches
+node_modules/
+.netlify/
+
 # OS / editor cruft
 Thumbs.db
 desktop.ini
@@ -5,8 +15,3 @@ desktop.ini
 *.swp
 .vscode/
 .idea/
-
-# Never commit real secrets. If you later add a form backend key or an
-# analytics token, put it in an untracked file rather than config.js.
-.env
-.env.*

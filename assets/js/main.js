@@ -132,28 +132,46 @@
       });
       return ok;
     },
-    /* Returns true if the submission was handed off; false to keep the form open. */
-    send: function (form, subject, body) {
-      // Spam honeypot — silently succeed so bots think they won.
+    /* Hands the submission off. Resolves true on success, false on a
+       real failure, so the UI can tell the difference instead of
+       claiming success whatever happened. */
+    send: function (form, subject, body, extra) {
+      // Spam honeypot — resolve true so bots believe they won.
       var hp = form.querySelector('.hp input');
-      if (hp && hp.value) return true;
+      if (hp && hp.value) return Promise.resolve(true);
 
       var mode = C.formMode || 'mailto';
-      if (mode === 'formspree' && C.formEndpoint) {
-        fetch(C.formEndpoint, {
-          method: 'POST',
-          headers: { 'Accept': 'application/json' },
-          body: new FormData(form)
+
+      if (mode === 'endpoint' && C.formEndpoint) {
+        var payload = {};
+        new FormData(form).forEach(function (v, k) {
+          if (k === '_gotcha') { payload._gotcha = v; return; }
+          if (payload[k] === undefined) { payload[k] = v; return; }
+          // Repeated names (the service checkboxes) become an array.
+          if (!Array.isArray(payload[k])) payload[k] = [payload[k]];
+          payload[k].push(v);
         });
-        return true;
+        payload.consent = !!form.querySelector('[name="consent"]:checked');
+        if (extra) Object.keys(extra).forEach(function (k) { payload[k] = extra[k]; });
+
+        return fetch(C.formEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(function (r) {
+          return r.ok ? true : r.json().catch(function () { return {}; }).then(function (j) {
+            throw new Error(j.error || 'Send failed');
+          });
+        });
       }
-      if (mode === 'netlify') { form.submit(); return true; }
+
+      if (mode === 'netlify') { form.submit(); return Promise.resolve(true); }
 
       var to = C.salesEmail || C.email || '';
       window.location.href = 'mailto:' + to +
         '?subject=' + encodeURIComponent(subject) +
         '&body=' + encodeURIComponent(body);
-      return true;
+      return Promise.resolve(true);
     }
   };
 
@@ -163,6 +181,13 @@
     cform.addEventListener('submit', function (e) {
       e.preventDefault();
       if (!window.BULAN_FORM.validate(cform)) return;
+
+      var btn = cform.querySelector('button[type="submit"]');
+      var label = btn ? btn.innerHTML : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+
+      var err = $('#contact-error');
+      if (err) err.hidden = true;
 
       var d = new FormData(cform);
       var lines = [];
@@ -175,16 +200,28 @@
         var v = d.getAll(k).filter(Boolean).join(', ');
         if (v) lines.push(labels[k] + ': ' + v);
       });
-      var body = 'New enquiry from the Bulan website\n' +
-                 '----------------------------------------\n' +
-                 lines.join('\n') + '\n\n' +
+      var NL = String.fromCharCode(10);
+      var body = 'New enquiry from the Bulan website' + NL +
+                 '----------------------------------------' + NL +
+                 lines.join(NL) + NL + NL +
                  'Received: ' + new Date().toLocaleString('en-ZA');
 
-      window.BULAN_FORM.send(cform, 'Website enquiry — ' + (d.get('company') || d.get('name') || 'New lead'), body);
-
-      cform.hidden = true;
-      var ok = $('#contact-success');
-      if (ok) { ok.hidden = false; ok.focus(); ok.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+      window.BULAN_FORM
+        .send(cform, 'Website enquiry — ' + (d.get('company') || d.get('name') || 'New lead'), body)
+        .then(function () {
+          cform.hidden = true;
+          var ok = $('#contact-success');
+          if (ok) { ok.hidden = false; ok.focus(); ok.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+        })
+        .catch(function (ex) {
+          if (btn) { btn.disabled = false; btn.innerHTML = label; }
+          if (err) {
+            $('#contact-error-msg').textContent =
+              (ex && ex.message) || 'Something went wrong on our side.';
+            err.hidden = false;
+            err.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          }
+        });
     });
   }
 })();

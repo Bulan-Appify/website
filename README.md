@@ -132,47 +132,97 @@ reversed **on launch day** — not before, or Google will cache the placeholder 
 
 ---
 
-## 3. Making the forms actually deliver
+## 3. Email — the contact form and quote builder
 
-`config.js` → `formMode`. Three options.
+Both forms POST JSON to a Netlify function that sends mail with **nodemailer**.
+Nothing about this runs on GitHub Pages: Pages serves static files only and cannot
+execute a function. **The site must be on Netlify for email to work.**
 
-### `"mailto"` (the default — works immediately, zero setup)
-Opens the visitor's email client with the enquiry pre-filled. No server, no cost, no
-third party touching the data. The drawback is real: some people will not complete the
-send, and it does nothing on a device with no mail client configured. Fine for launch
-day, worth replacing within a month.
+```
+netlify/functions/contact.js   the endpoint
+netlify.toml                   tells Netlify where functions live
+package.json                   exists only so Netlify installs nodemailer
+.env.example                   documents the variables (holds no secrets)
+```
 
-### `"formspree"` (recommended once you are live)
-1. Sign up at <https://formspree.io>, create a form, copy the endpoint URL.
-2. In `config.js`: `formMode: "formspree"`, `formEndpoint: "https://formspree.io/f/xxxx"`.
-3. Add Formspree to the operator list in `legal/privacy.html` §4 — it processes personal
-   information on your behalf and POPIA §21 requires a written agreement with them.
-4. `_headers` has a strict Content-Security-Policy. Add the endpoint to `connect-src`:
-   ```
-   connect-src 'self' https://formspree.io;
-   ```
+### 3.1 Get an app password
 
-### `"netlify"` (if you host on Netlify)
-Set `formMode: "netlify"` and add `netlify` plus `name="contact"` to the `<form>` tags in
-`contact.html` and `quote.html`. Netlify detects and stores submissions. Same POPIA note
-applies — list them as an operator.
+Google will not accept your normal account password from a script.
 
-Both forms already include a hidden honeypot field (`_gotcha`) that silently absorbs bots.
+1. The sending account needs **2-Step Verification** switched on.
+2. Google Account → **Security** → **2-Step Verification** → **App passwords**.
+3. Create one named "Bulan website" and copy the 16-character value.
 
----
+### 3.2 Set the variables in Netlify
+
+**Site configuration → Environment variables.** Never in a file, never in git.
+
+| Variable | Value |
+|---|---|
+| `SMTP_HOST` | `smtp.gmail.com` |
+| `SMTP_PORT` | `587` |
+| `SMTP_USER` | the sending mailbox, e.g. `hello@bulan.co.za` |
+| `SMTP_PASS` | the 16-character app password |
+| `MAIL_FROM` | `"Bulan website <hello@bulan.co.za>"` |
+| `MAIL_TO` | where leads should land |
+| `ALLOWED_ORIGIN` | `https://www.bulan.co.za` once the domain is live |
+| `MAIL_ACK` | `false` — see below |
+
+> **`MAIL_FROM` must be your own domain.** Sending "from" the visitor's address
+> fails SPF and DKIM and lands the mail in spam. The function puts the visitor in
+> `Reply-To`, so hitting reply in your inbox still reaches them.
+
+> **`MAIL_ACK` is off deliberately.** The site promises "a considered human reply,
+> not an auto-responder". A templated email arriving three seconds after someone
+> writes to you contradicts that in the most visible way possible. Turn it on only
+> if you decide a delivery receipt is worth the contradiction.
+
+### 3.3 Test it locally
+
+```powershell
+npm install
+copy .env.example .env      # then fill in the real values
+npx netlify dev             # serves the site AND the function
+```
+
+Leave `ALLOWED_ORIGIN` blank in `.env` while testing from localhost, or the
+function will reject your own requests.
+
+### 3.4 What the function does
+
+- Rejects anything that is not a POST, and any cross-origin POST once
+  `ALLOWED_ORIGIN` is set
+- Silently absorbs the honeypot field, answering 200 so bots do not retry
+- Throttles repeat sends from one IP (a speed bump on a warm container, not a
+  security control — Netlify's platform limits do the real work)
+- Caps every field length, so nobody can paste a novel to burn your send quota
+- Strips CR/LF from anything reaching a mail header, blocking header injection
+- Escapes every value before it enters the HTML body
+- Returns a real error to the page on failure, so the form shows "that did not
+  send" with your address instead of pretending it worked
+
+### 3.5 If you ever need to switch it off
+
+Set `formMode: "mailto"` in `assets/js/config.js`. The forms revert to opening the
+visitor's own mail client and need no server at all. Useful if the function breaks
+and you want the site to keep collecting enquiries while you fix it.
 
 ## 4. Deploying
 
 The site is static files. Anywhere that serves static files will work.
 
-### Netlify or Cloudflare Pages (recommended — free, fast, HTTPS included)
-Connect the git repository, set **build command: none** and **publish directory:
-`.`**. `_headers` and `_redirects` are picked up automatically.
+### Netlify (required, now that email runs through a function)
+Connect the git repository. `netlify.toml` already declares the publish directory
+and the functions folder, so there is nothing to configure in the UI except the
+environment variables in section 3.2. `_headers` and `_redirects` are picked up
+automatically, which is also why Netlify beats GitHub Pages here — Pages ignores
+both, so you would lose the CSP, HSTS and the clean URLs.
 
 ### GitHub Pages
-Works, including from a project subdirectory (`username.github.io/bulan/`) because the
-links are relative. It ignores `_headers` and `_redirects`, so you lose the security
-headers and the extension-less URL redirects. Fine to start.
+Serves the static pages fine, including from a project subdirectory
+(`username.github.io/bulan/`) because the links are relative. But it **cannot run
+the mail function**, and it ignores `_headers` and `_redirects`, so you also lose
+the security headers and the tidy URLs. Use it to preview, not to launch.
 
 ### A South African host (Afrihost, Xneelo, HostAfrica)
 Upload the folder contents to `public_html`. Keeps data resident in South Africa, which
