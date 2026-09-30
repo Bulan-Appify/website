@@ -1,7 +1,7 @@
 /* ============================================================
    BULAN — Quote builder → indicative pro-forma quotation.
 
-   ►► PRICES LIVE IN THE CATALOGUE BELOW. Edit freely. ◄◄
+   ►► PRICES LIVE IN pricing.js, NOT HERE. ◄◄
    Every figure is an indicative starting price in ZAR, excluding
    VAT. Nothing here is a binding offer — the generated document
    says so explicitly, and it is NOT a tax invoice.
@@ -16,148 +16,22 @@
   var root = $('#quote-builder');
   if (!root) return;
 
-  /* ========================================================
-     1. CATALOGUE
-     price     — indicative starting price, ZAR, excl. VAT
-     recurring — true = per month (multiplied by engagement months)
-     ======================================================== */
-  var CATALOG = [
-    {
-      key: 'dev', label: 'Software Development', blurb: 'Design and build.',
-      items: [
-        { id: 'dev-discovery', name: 'Discovery & solution architecture', desc: 'Two-week paid discovery: requirements, architecture, risk register, costed delivery plan.', price: 45000 },
-        { id: 'dev-design',    name: 'Product & UX/UI design',            desc: 'User flows, wireframes, high-fidelity UI and a reusable component library.', price: 58000 },
-        { id: 'dev-web-s',     name: 'Web application — compact',         desc: 'Up to ~12 screens, one integration, single user role.', price: 185000 },
-        { id: 'dev-web-m',     name: 'Web application — standard',        desc: 'Up to ~30 screens, multiple roles, payments or third-party integrations.', price: 420000 },
-        { id: 'dev-web-l',     name: 'Web platform — complex',            desc: 'Multi-tenant, workflow engines, reporting, high-volume data.', price: 850000 },
-        { id: 'dev-mobile',    name: 'Mobile app (iOS + Android)',        desc: 'Cross-platform build, store submission and release pipeline included.', price: 320000 },
-        { id: 'dev-api',       name: 'API & integration layer',           desc: 'Documented REST/GraphQL APIs, third-party integrations, webhooks.', price: 95000 },
-        { id: 'dev-legacy',    name: 'Legacy modernisation assessment',   desc: 'Audit of an existing system with a staged, costed modernisation roadmap.', price: 55000 },
-        { id: 'dev-cloud',     name: 'Cloud setup, CI/CD & DevOps',       desc: 'Infrastructure-as-code, environments, automated pipelines, monitoring.', price: 65000 },
-        { id: 'dev-squad',     name: 'Dedicated engineer (embedded)',     desc: 'One senior engineer inside your team, full-time.', price: 118000, recurring: true }
-      ]
-    },
-    {
-      key: 'qa', label: 'Software Testing & Quality', blurb: 'Prove it works.',
-      items: [
-        { id: 'qa-assess',   name: 'QA maturity assessment',            desc: 'Where your quality process leaks, and the cheapest three fixes.', price: 32000 },
-        { id: 'qa-strategy', name: 'Test strategy & test plan',          desc: 'Risk-based strategy, coverage model, entry/exit criteria, tooling choice.', price: 28000 },
-        { id: 'qa-manual',   name: 'Functional & exploratory test cycle',desc: 'One full cycle with documented defects, severity and evidence.', price: 24000 },
-        { id: 'qa-autoframe',name: 'Test automation framework setup',    desc: 'Framework, CI integration, reporting dashboard, team handover.', price: 78000 },
-        { id: 'qa-regress',  name: 'Automated regression suite',         desc: 'Roughly 50 automated end-to-end cases, maintained and CI-wired.', price: 46000 },
-        { id: 'qa-perf',     name: 'Performance & load testing',         desc: 'Load model, soak and spike tests, bottleneck analysis, tuning advice.', price: 58000 },
-        { id: 'qa-a11y',     name: 'Accessibility audit (WCAG 2.2 AA)',  desc: 'Automated plus manual assistive-technology testing and a remediation list.', price: 36000 },
-        { id: 'qa-uat',      name: 'UAT design & business-user support', desc: 'UAT scripts, facilitation and defect triage with your business team.', price: 30000 },
-        { id: 'qa-embed',    name: 'Embedded QA engineer',               desc: 'One quality engineer inside your delivery team, full-time.', price: 92000, recurring: true }
-      ]
-    },
-    {
-      key: 'sec', label: 'Cyber Security', blurb: 'Defend it.',
-      items: [
-        { id: 'sec-va',      name: 'External vulnerability assessment',  desc: 'Authenticated and unauthenticated scanning of your internet-facing estate.', price: 38000 },
-        { id: 'sec-webpt',   name: 'Web application penetration test',   desc: 'OWASP ASVS-aligned manual test, exploit proof, remediation retest included.', price: 65000 },
-        { id: 'sec-mobpt',   name: 'Mobile application penetration test',desc: 'Static and dynamic analysis of the app, its storage and its APIs.', price: 72000 },
-        { id: 'sec-netpt',   name: 'Internal network penetration test',  desc: 'Assumed-breach test of lateral movement, privilege escalation and segmentation.', price: 88000 },
-        { id: 'sec-cloud',   name: 'Cloud security posture review',      desc: 'AWS, Azure or GCP configuration, identity and data-exposure review.', price: 52000 },
-        { id: 'sec-code',    name: 'Secure source code review',          desc: 'Manual review of security-critical code paths plus SAST tuning.', price: 58000 },
-        { id: 'sec-phish',   name: 'Phishing simulation & awareness',    desc: 'Simulated campaign plus training for up to 100 staff, with a board-ready report.', price: 34000 },
-        { id: 'sec-popia',   name: 'POPIA readiness assessment',         desc: 'Gap analysis against the eight conditions, plus an action plan you can execute.', price: 42000 },
-        { id: 'sec-iso',     name: 'ISO/IEC 27001 gap analysis',         desc: 'Control-by-control gap analysis and a prioritised path to certification.', price: 68000 },
-        { id: 'sec-ir',      name: 'Incident response readiness',        desc: 'Playbooks, roles, comms templates and a tabletop exercise with your team.', price: 46000 },
-        { id: 'sec-mon',     name: 'Managed monitoring & vulnerability management', desc: 'Continuous scanning, triage and monthly reporting.', price: 28000, recurring: true }
-      ]
-    },
-    {
-      key: 'ai', label: 'AI & Intelligent Automation', blurb: 'Scale it.',
-      items: [
-        { id: 'ai-assess',  name: 'AI opportunity assessment',       desc: 'We map your processes and rank them by payback, risk and effort. No hype.', price: 38000 },
-        { id: 'ai-process', name: 'Process automation (per workflow)',desc: 'One end-to-end business workflow automated, monitored and handed over.', price: 68000 },
-        { id: 'ai-docs',    name: 'Document intelligence pipeline',   desc: 'Extract, validate and route data from invoices, claims, forms or contracts.', price: 125000 },
-        { id: 'ai-copilot', name: 'Internal assistant / RAG copilot',  desc: 'A grounded assistant over your own documents, with citations and access control.', price: 185000 },
-        { id: 'ai-support', name: 'Customer support automation',      desc: 'Triage, deflection and hand-off to humans, wired into your existing helpdesk.', price: 145000 },
-        { id: 'ai-gov',     name: 'AI governance & policy framework', desc: 'Acceptable-use policy, data boundaries, human-in-the-loop and audit controls.', price: 48000 },
-        { id: 'ai-evals',   name: 'Model evaluation & monitoring',    desc: 'Evaluation harness, quality gates and drift alerting for a live AI feature.', price: 72000 },
-        { id: 'ai-run',     name: 'Managed AI operations',            desc: 'We run, evaluate and improve your deployed AI systems.', price: 34000, recurring: true }
-      ]
-    }
-  ];
-
-  var TIMELINES = [
-    { id: 'flexible',    name: 'Flexible',    desc: 'We slot it around other work. Longest runway, best price.', adj: -0.08 },
-    { id: 'standard',    name: 'Standard',    desc: 'Normal delivery cadence. Start within 2–3 weeks.', adj: 0 },
-    { id: 'accelerated', name: 'Accelerated', desc: 'Priority squad, compressed timeline, start within 5 working days.', adj: 0.18 }
-  ];
-
-  var CARE = { id: 'care', name: '12-month care plan', desc: 'Hosting oversight, dependency and security patching, monitoring, and a monthly health report.', rate: 0.15 };
-  var BUNDLE = { threshold: 3, rate: 0.07, name: 'Integrated delivery discount' };
+  /* The price list and the pricing rules live in pricing.js, shared with
+     the mail function on the server. Edit prices there. */
+  var P = window.BULAN_PRICING;
+  var CATALOG = P.CATALOG, TIMELINES = P.TIMELINES, CARE = P.CARE;
 
   /* ========================================================
-     2. State
+     1. State
      ======================================================== */
   var state = { items: {}, timeline: 'standard', months: 6, care: false };
 
-  function money(n) {
-    var s = Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-    return (C.currencySymbol || 'R') + ' ' + s;
-  }
-
-  function findItem(id) {
-    for (var i = 0; i < CATALOG.length; i++) {
-      var f = CATALOG[i].items.filter(function (x) { return x.id === id; })[0];
-      if (f) return { item: f, group: CATALOG[i] };
-    }
-    return null;
-  }
+  function money(n) { return P.money(n, C.currencySymbol); }
 
   /* ========================================================
-     3. Pricing
+     2. Pricing — shared with the server, see pricing.js
      ======================================================== */
-  function compute() {
-    var lines = [], oneOff = 0, monthly = 0, groups = {};
-
-    Object.keys(state.items).forEach(function (id) {
-      if (!state.items[id]) return;
-      var f = findItem(id);
-      if (!f) return;
-      groups[f.group.key] = true;
-      if (f.item.recurring) {
-        var total = f.item.price * state.months;
-        monthly += f.item.price;
-        oneOff  += total;
-        lines.push({ name: f.item.name, note: f.group.label + ' · ' + money(f.item.price) + ' × ' + state.months + ' months', amount: total });
-      } else {
-        oneOff += f.item.price;
-        lines.push({ name: f.item.name, note: f.group.label, amount: f.item.price });
-      }
-    });
-
-    var disciplines = Object.keys(groups).length;
-    var subtotal = oneOff;
-    var adjustments = [];
-
-    var tl = TIMELINES.filter(function (t) { return t.id === state.timeline; })[0];
-    if (tl && tl.adj !== 0 && subtotal > 0) {
-      var tAmt = subtotal * tl.adj;
-      adjustments.push({ name: tl.name + ' timeline', amount: tAmt });
-    }
-
-    if (state.care && subtotal > 0) {
-      adjustments.push({ name: CARE.name, amount: subtotal * CARE.rate });
-    }
-
-    if (disciplines >= BUNDLE.threshold && subtotal > 0) {
-      adjustments.push({ name: BUNDLE.name + ' (' + disciplines + ' disciplines)', amount: -(subtotal * BUNDLE.rate) });
-    }
-
-    var adjTotal = adjustments.reduce(function (a, b) { return a + b.amount; }, 0);
-    var net = subtotal + adjTotal;
-    var vat = C.chargeVat ? net * (C.vatRate || 0.15) : 0;
-
-    return {
-      lines: lines, adjustments: adjustments, disciplines: disciplines,
-      subtotal: subtotal, monthly: monthly, net: net, vat: vat, total: net + vat
-    };
-  }
+  function compute() { return P.compute(state, C); }
 
   /* ========================================================
      4. Render — option tiles
@@ -406,18 +280,33 @@
     return o;
   }
 
-  /* The figures behind the pro-forma, for the email Bulan receives. The
-     server shape-checks them and lays them out; plainText() below stays
-     as the fallback and as the body of the manual mailto send. */
-  function summary(q) {
-    var tl = TIMELINES.filter(function (t) { return t.id === state.timeline; })[0];
+  /* What the visitor picked, by id. The server prices the quotation from
+     these with the same pricing.js, so the emailed figures are Bulan's own. */
+  function selection() {
     return {
-      lines: q.lines.map(function (l) { return { name: l.name, note: l.note, amount: l.amount }; }),
-      adjustments: q.adjustments.map(function (a) { return { name: a.name, amount: a.amount }; }),
-      net: q.net, vat: q.vat, total: q.total, vatCharged: !!C.chargeVat,
-      timeline: tl ? tl.name : state.timeline, months: state.months, care: !!state.care,
-      hasRecurring: q.monthly > 0
+      items: Object.keys(state.items).filter(function (k) { return state.items[k]; }),
+      timeline: state.timeline, months: state.months, care: !!state.care
     };
+  }
+
+  var endpoint = (C.formMode || 'mailto') === 'endpoint';
+
+  function status(msg, ok) {
+    var el = $('#qb-email-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.toggle('is-err', !ok);
+    el.hidden = !msg;
+  }
+
+  /* kind "quote": Bulan gets the lead and the visitor gets the quotation.
+     kind "quote-copy": the visitor gets the quotation again, nothing else. */
+  function sendQuote(kind) {
+    var q = compute(), d = details();
+    return window.BULAN_FORM.send($('#qb-details'),
+      'Quotation ' + reference + ' — ' + (d.company || d.name),
+      plainText(q, d),
+      { kind: kind, reference: reference, selection: selection() });
   }
 
   function plainText(q, d) {
@@ -452,30 +341,40 @@
 
     ensureDoc(buildDoc(q, d));
 
-    // Notify Bulan that a quote was generated. In "mailto" mode that would
-    // throw the visitor into their mail client uninvited, so there we offer
-    // it as a button instead of doing it behind their back.
-    var auto = (C.formMode || 'mailto') !== 'mailto';
-    if (auto) {
-      window.BULAN_FORM.send($('#qb-details'),
-        'Pro-forma generated ' + reference + ' — ' + (d.company || d.name),
-        plainText(q, d),
-        { kind: 'quote', reference: reference, quote: plainText(q, d), summary: summary(q) }
-      ).catch(function () {
-        // The quotation itself is already on screen and downloadable, so a
-        // failed notification must not look like a failed quotation. Fall
-        // back to the manual send instead.
-        $('#qb-sent-auto').hidden = true;
+    // Send it: the lead to Bulan and the quotation to the visitor. In
+    // "mailto" mode that would throw the visitor into their mail client
+    // uninvited, so there it stays a button.
+    status('', true);
+    $('#qb-sent-auto').hidden = true;
+    $('#qb-send').hidden = endpoint;
+    $('#qb-send-wrap').hidden = endpoint;
+    if (endpoint) {
+      sendQuote('quote').then(function () {
+        $('#qb-sent-to').textContent = d.email;
+        $('#qb-sent-auto').hidden = false;
+      }).catch(function () {
+        // The quotation is already on screen and downloadable, so a failed
+        // send must not look like a failed quotation. Offer to try again.
         $('#qb-send').hidden = false;
-        $('#qb-send-wrap').hidden = false;
+        status('We could not send it just now. Try "Send it to Bulan" again, or download it.', false);
       });
     }
-    $('#qb-sent-auto').hidden = !auto;
-    $('#qb-send').hidden = auto;
-    $('#qb-send-wrap').hidden = auto;
   }
 
   $('#qb-send').addEventListener('click', function () {
+    var btn = this;
+    if (endpoint) {
+      btn.disabled = true;
+      sendQuote('quote').then(function () {
+        btn.hidden = true;
+        $('#qb-sent-to').textContent = details().email;
+        $('#qb-sent-auto').hidden = false;
+        status('', true);
+      }).catch(function (e) {
+        status((e && e.message) || 'That did not send. Please try again shortly.', false);
+      }).then(function () { btn.disabled = false; });
+      return;
+    }
     var q = compute(), d = details();
     window.location.href = 'mailto:' + (C.salesEmail || C.email) +
       '?subject=' + encodeURIComponent('Quotation request ' + reference + ' — ' + (d.company || d.name)) +
@@ -508,9 +407,19 @@
   });
 
   $('#qb-email').addEventListener('click', function () {
-    var q = compute(), d = details();
-    var to = d.email || C.salesEmail || C.email;
-    window.location.href = 'mailto:' + to +
+    var btn = this, d = details();
+    if (endpoint) {
+      btn.disabled = true;
+      status('Sending to ' + d.email + '…', true);
+      sendQuote('quote-copy').then(function () {
+        status('Sent to ' + d.email + '. Check your inbox (and spam folder) in a minute.', true);
+      }).catch(function (e) {
+        status((e && e.message) || 'That did not send. Please try again shortly.', false);
+      }).then(function () { btn.disabled = false; });
+      return;
+    }
+    var q = compute();
+    window.location.href = 'mailto:' + (d.email || C.salesEmail || C.email) +
       '?subject=' + encodeURIComponent('Bulan pro-forma quotation ' + reference) +
       '&body=' + encodeURIComponent(plainText(q, d) + '\n\n— ' + (C.tradingName || 'Bulan') + '\n' + (C.email || ''));
   });
@@ -518,6 +427,7 @@
   $('#qb-restart').addEventListener('click', function () {
     state = { items: {}, timeline: 'standard', months: 6, care: false };
     reference = '';   // so Ctrl+P prints the builder again, not the old quotation
+    status('', true);
     $$('#qb-catalog input, #qb-care input').forEach(function (i) { i.checked = false; });
     var std = $('input[name="tl"][value="standard"]'); if (std) std.checked = true;
     if (monthsEl) monthsEl.value = '6';

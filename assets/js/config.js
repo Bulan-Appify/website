@@ -6,7 +6,7 @@
    the pro-forma document and the forms all read from here.
    ============================================================ */
 
-window.BULAN = {
+var BULAN_CONFIG = {
 
   /* --- Identity ------------------------------------------ */
   legalName:   "Bulan Technologies (Pty) Ltd",   // TODO: confirm once registered with CIPC
@@ -86,3 +86,8 @@ window.BULAN = {
   // POPIA cookie story simple. See README.md.
   analytics: { provider: "", siteId: "" }
 };
+
+/* The browser reads this as window.BULAN. The mail function require()s the
+   same file, so the quotation it emails carries the same company details. */
+if (typeof module !== "undefined" && module.exports) module.exports = BULAN_CONFIG;
+else window.BULAN = BULAN_CONFIG;

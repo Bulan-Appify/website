@@ -211,12 +211,10 @@ const VALID = {
   pass("rapid repeat from one IP throttled (429)", r.statusCode === 429);
 
   // --- one template per form -------------------------------------------
-  const SUMMARY = {
-    lines: [{ name: "Mobile app (iOS + Android)", note: "Software Development", amount: 320000 }],
-    adjustments: [{ name: "Integrated delivery discount (3 disciplines)", amount: -22400 }],
-    net: 297600, vat: 0, total: 297600, vatCharged: false,
-    timeline: "Standard", months: 6, care: false, hasRecurring: false,
-  };
+  // Three items across three disciplines: R 463 000 less the 7% bundle
+  // discount (R 32 410) = R 430 590, the same figure the builder shows.
+  const SELECTION = { items: ["dev-mobile", "qa-autoframe", "sec-webpt"], timeline: "standard", months: 6, care: false };
+  const QUOTE = Object.assign({}, VALID, { kind: "quote", reference: "BLN-2026-4821", selection: SELECTION, message: undefined, notes: "Phase the pen test?" });
   const subjectOf = (raw) => decodeSubject(split(raw || "").headers);
 
   captured = [];
@@ -234,39 +232,68 @@ const VALID = {
   pass("live incident flagged in the subject", subjectOf(captured[0]).includes("URGENT"));
   pass("live incident flagged in the body", split(captured[0] || "").html.includes("Live security incident."));
 
+  // --- quotations are priced on the server ------------------------------
   captured = [];
-  await call(Object.assign({}, VALID, { kind: "quote", reference: "BLN-2026-4821", summary: SUMMARY, message: undefined, notes: "Phase the pen test?" }));
+  await call(QUOTE);
   const q = split(captured[0] || "");
-  pass("quote subject carries reference and total", /BLN-2026-4821.*R 297 600/.test(subjectOf(captured[0])));
+  pass("quote subject carries reference and total", /BLN-2026-4821.*R 430 590/.test(subjectOf(captured[0])));
   pass("quote total appears before the contact details",
-    q.html.indexOf("R 297 600") > -1 && q.html.indexOf("R 297 600") < q.html.indexOf("Contact"));
-  pass("quote lines itemised", q.html.includes("Mobile app (iOS + Android)") && q.html.includes("R 22 400"));
+    q.html.indexOf("R 430 590") > -1 && q.html.indexOf("R 430 590") < q.html.indexOf("Contact"));
+  pass("quote lines itemised from pricing.js",
+    q.html.includes("Mobile app (iOS + Android)") && q.html.includes("R 320 000") && q.html.includes("R 32 410"));
   pass("quote notes titled as client notes", q.html.includes("Client notes") && q.html.includes("Phase the pen test?"));
 
   captured = [];
-  r = await call(Object.assign({}, VALID, { kind: "quote", reference: "BLN-2026-4821", summary: { total: "lots", lines: "x" }, quote: "TOTAL: R 1" }));
-  pass("malformed quote summary falls back to the plain breakdown",
-    r.statusCode === 200 && split(captured[0] || "").html.includes("TOTAL: R 1"));
+  await call(Object.assign({}, QUOTE, { summary: { total: 1, lines: [{ name: "Free website", amount: 1 }] }, quote: "TOTAL: R 1" }));
+  const tampered = split(captured[0] || "").html;
+  pass("figures sent by the browser are ignored", tampered.includes("R 430 590") && !tampered.includes("Free website"));
 
-  // --- receipt (on by default) -------------------------------------------
+  captured = [];
+  await call(Object.assign({}, QUOTE, { selection: { items: ["dev-mobile", "made-up-item", "dev-mobile"] } }));
+  pass("unknown and repeated items dropped", subjectOf(captured[0]).includes("R 320 000"));
+
+  captured = [];
+  r = await call(Object.assign({}, QUOTE, { selection: { items: [] } }));
+  pass("empty quotation rejected (400)", r.statusCode === 400 && captured.length === 0);
+
+  captured = [];
+  await call(Object.assign({}, QUOTE, { reference: "<b>spam</b> visit evil.example" }));
+  pass("a reference that is not ours is replaced", !(captured[0] || "").includes("evil.example") && /BLN-\d{4}-\d{4}/.test(subjectOf(captured[0])));
+
+  // --- the visitor's copy (on by default) -------------------------------
   process.env.MAIL_ACK = "true"; reload();
   captured = [];
-  r = await call(Object.assign({}, VALID, { kind: "quote", reference: "BLN-2026-4821", summary: SUMMARY }));
-  const receipt = split(captured[1] || "");
-  pass("quote sends lead and receipt", r.statusCode === 200 && captured.length === 2);
-  pass("receipt goes to the visitor", /^To:.*t@meridian\.co\.za/mi.test(receipt.headers));
-  pass("receipt names the quotation", decodeSubject(receipt.headers).includes("BLN-2026-4821"));
-  pass("receipt greets by first name", receipt.html.includes("Hi Thabo,"));
-  pass("receipt echoes no message, company or figures",
-    !receipt.html.includes("peak season") && !receipt.html.includes("Meridian") && !receipt.html.includes("297"));
+  r = await call(Object.assign({}, QUOTE, { name: "Thabo www.spam-site.com Mokoena", company: "Meridian Freight http://evil.example" }));
+  const mine = split(captured[1] || "");
+  pass("quote sends the lead and the quotation", r.statusCode === 200 && captured.length === 2);
+  pass("quotation goes to the visitor", /^To:.*t@meridian\.co\.za/mi.test(mine.headers));
+  pass("quotation subject names reference and total", /BLN-2026-4821.*R 430 590/.test(subjectOf(captured[1])));
+  pass("quotation has the lines, total and terms",
+    mine.html.includes("Mobile app (iOS + Android)") && mine.html.includes("R 430 590") && mine.html.includes("Payment terms") && mine.html.includes("not a tax invoice"));
+  pass("quotation greets by first name", mine.html.includes("Hi Thabo,"));
+  pass("quotation strips links from name and company", !/spam-site|evil\.example/.test(captured[1] || ""));
+  pass("quotation leaves out the free-text notes", !mine.html.includes("Phase the pen test?"));
+  pass("quotation leaves out placeholder company details", !/TODO|XXXXXX/.test(mine.html));
+
+  r = await call(Object.assign({}, QUOTE, { kind: "quote-copy" }));
+  pass("'Email it to me' right after is held back (429)", r.statusCode === 429);
+
+  reload();
+  captured = [];
+  r = await call(Object.assign({}, QUOTE, { kind: "quote-copy" }));
+  pass("'Email it to me' sends the quotation only", r.statusCode === 200 && captured.length === 1 && /^To:.*t@meridian\.co\.za/mi.test(split(captured[0]).headers));
 
   captured = [];
-  await call(Object.assign({}, VALID, { kind: "quote", reference: "<b>spam</b> visit evil.example" }));
-  pass("receipt drops a reference that is not ours", !(captured[1] || "").includes("evil.example"));
+  r = await call(Object.assign({}, VALID, { kind: "brief", budget: "Free please www.x.com" }));
+  const conf = split(captured[1] || "");
+  pass("brief sends the lead and a confirmation", r.statusCode === 200 && captured.length === 2);
+  pass("confirmation lists the options chosen", conf.html.includes("Software development, Cyber security") && conf.html.includes("Within a month"));
+  pass("confirmation drops a value that is not a form option", !conf.html.includes("Free please"));
+  pass("confirmation does not repeat the message", !conf.html.includes("peak season"));
 
   captured = [];
   r = await call(Object.assign({}, VALID, { kind: "brief", email: "bounce@meridian.co.za" }));
-  pass("failed receipt still reports success (lead was sent)", r.statusCode === 200 && captured.length === 1);
+  pass("failed confirmation still reports success (lead was sent)", r.statusCode === 200 && captured.length === 1);
 
   process.env.MAIL_ACK = "false"; reload();
   captured = [];
