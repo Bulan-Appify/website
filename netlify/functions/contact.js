@@ -1,14 +1,20 @@
 /* ============================================================
    Bulan — contact / quotation mail endpoint.
 
-   POST /.netlify/functions/contact
+   POST /.netlify/functions/contact   (Netlify)
+   POST /api/contact                  (AWS: Lambda behind CloudFront)
+
+   The same file runs on both. Netlify Functions and API Gateway REST
+   APIs send the "v1" event shape; Lambda Function URLs and API Gateway
+   HTTP APIs send "v2". The handler normalises either. See README §4.
 
    Handles both the enquiry form and the quote builder. Everything
    the client sends is treated as untrusted: validated, length-capped
    and escaped before it reaches an email body.
 
    Configuration is entirely environment variables — set them in
-   Netlify under Site configuration → Environment variables. Nothing
+   Netlify under Site configuration → Environment variables (or on the
+   Lambda function when hosted on AWS). Nothing
    secret belongs in this file or in git. See .env.example.
    ============================================================ */
 
@@ -23,8 +29,10 @@ const {
   MAIL_FROM,               // e.g. "Bulan website <hello@bulan.co.za>"
   MAIL_TO,                 // where leads land
   MAIL_ACK = "false",      // send the sender a receipt? see note below
-  ALLOWED_ORIGIN = "",     // e.g. "https://www.bulan.co.za"
+  ALLOWED_ORIGIN = "",     // e.g. "https://www.bulan.co.za" — comma-separate several
 } = process.env;
+
+const ORIGINS = ALLOWED_ORIGIN.split(",").map((o) => o.trim()).filter(Boolean);
 
 /* Field limits. Generous for humans, hostile to anyone pasting a
    novel into the message box to run up our send quota. */
@@ -72,12 +80,18 @@ function throttled(ip) {
 
 /* --- Handler ----------------------------------------------- */
 exports.handler = async (event) => {
-  if (event.httpMethod === "OPTIONS") return json(204, {});
-  if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
+  const rc = event.requestContext || {};
+  const method = event.httpMethod || (rc.http && rc.http.method) || "";
+  // v2 lowercases header names; v1 may not. Lowercase once, read once.
+  const headers = {};
+  for (const [k, v] of Object.entries(event.headers || {})) headers[k.toLowerCase()] = v;
+
+  if (method === "OPTIONS") return json(204, {});
+  if (method !== "POST") return json(405, { error: "Method not allowed" });
 
   // Same-origin only. The form is on our own site; anything else is abuse.
-  const origin = event.headers.origin || event.headers.Origin || "";
-  if (ALLOWED_ORIGIN && origin && origin !== ALLOWED_ORIGIN) {
+  const origin = headers.origin || "";
+  if (ORIGINS.length && origin && !ORIGINS.includes(origin)) {
     return json(403, { error: "Forbidden" });
   }
 
@@ -88,7 +102,10 @@ exports.handler = async (event) => {
 
   let data;
   try {
-    data = JSON.parse(event.body || "{}");
+    const raw = event.isBase64Encoded
+      ? Buffer.from(event.body || "", "base64").toString("utf8")
+      : event.body;
+    data = JSON.parse(raw || "{}");
   } catch {
     return json(400, { error: "Malformed request." });
   }
@@ -98,8 +115,10 @@ exports.handler = async (event) => {
   if (data._gotcha) return json(200, { ok: true });
 
   const ip =
-    (event.headers["x-nf-client-connection-ip"] ||
-     (event.headers["x-forwarded-for"] || "").split(",")[0] ||
+    (headers["x-nf-client-connection-ip"] ||
+     (headers["x-forwarded-for"] || "").split(",")[0] ||
+     (rc.http && rc.http.sourceIp) ||
+     (rc.identity && rc.identity.sourceIp) ||
      "unknown").trim();
   if (throttled(ip)) return json(429, { error: "Please wait a moment before sending again." });
 
@@ -134,6 +153,11 @@ exports.handler = async (event) => {
     : `Website enquiry — ${who}`;
 
   /* --- Compose ------------------------------------------- */
+  // Serverless runtimes run in UTC. Stamp the mail in the office's own
+  // time so "received 09:11" does not really mean 11:11 SAST.
+  const received = new Date().toLocaleString("en-ZA", {
+    timeZone: "Africa/Johannesburg", dateStyle: "medium", timeStyle: "short",
+  }) + " SAST";
   const ORDER = [
     ["name", "Name"], ["role", "Job title"], ["company", "Company"],
     ["email", "Email"], ["phone", "Phone"], ["country", "Country"],
@@ -149,7 +173,7 @@ exports.handler = async (event) => {
     ...rows.map(([k, label]) => `${label}: ${f[k]}`),
     body ? `\n${isQuote ? "Notes" : "Brief"}:\n${body}` : "",
     f.quote ? `\nQuotation breakdown:\n${f.quote}` : "",
-    `\nReceived: ${new Date().toISOString()}`,
+    `\nReceived: ${received}`,
     `Source IP: ${ip}`,
   ].filter(Boolean).join("\n");
 
@@ -171,7 +195,7 @@ exports.handler = async (event) => {
   ${f.quote ? `<h3 style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6B7688;margin:26px 0 8px">Quotation breakdown</h3>
   <pre style="font-size:12.5px;line-height:1.6;background:#F5F7FB;padding:14px;border-radius:8px;white-space:pre-wrap;margin:0">${esc(f.quote)}</pre>` : ""}
   <p style="font-size:12px;color:#8A93A3;margin-top:28px;border-top:1px solid #EDF0F5;padding-top:12px">
-    Sent from the Bulan website · ${esc(new Date().toLocaleString("en-ZA"))} · IP ${esc(ip)}
+    Sent from the Bulan website · ${esc(received)} · IP ${esc(ip)}
   </p>
 </div>`;
 
@@ -208,9 +232,14 @@ exports.handler = async (event) => {
       await transporter.sendMail({
         from: MAIL_FROM || `Bulan <${SMTP_USER}>`,
         to: f.email,
-        subject: "We have your message — Bulan",
-        text: `Hi ${oneLine(f.name)},\n\nThis is a delivery receipt, not our reply.\n\n`
-            + `We have your message and an engineer will respond within one business day.\n\n`
+        subject: isQuote
+          ? `We have your quotation request ${oneLine(f.reference)} — Bulan`.replace(/\s+/g, " ")
+          : "We have your message — Bulan",
+        text: `Hi ${oneLine(f.name).split(" ")[0]},\n\nThis is a delivery receipt, not our reply.\n\n`
+            + (isQuote
+              ? `We have your quotation request${f.reference ? " " + oneLine(f.reference) : ""}. `
+                + `An engineer will review it and respond within one business day.\n\n`
+              : `We have your message and an engineer will respond within one business day.\n\n`)
             + `— Bulan\n`,
       });
     }

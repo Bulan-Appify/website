@@ -143,7 +143,27 @@ const VALID = {
   process.env.ALLOWED_ORIGIN = "https://www.bulan.co.za"; reload();
   r = await call(VALID, { origin: "https://evil.example" });
   pass("cross-origin POST rejected (403)", r.statusCode === 403);
+  process.env.ALLOWED_ORIGIN = "https://bulan.co.za, https://www.bulan.co.za"; reload();
+  captured = [];
+  r = await call(VALID, { origin: "https://bulan.co.za" });
+  pass("any origin in a comma-separated list accepted", r.statusCode === 200);
   process.env.ALLOWED_ORIGIN = ""; reload();
+
+  // --- AWS event shapes ---------------------------------------------
+  // Lambda Function URLs and API Gateway HTTP APIs send the v2 shape:
+  // method under requestContext.http, and a body that may be base64.
+  captured = [];
+  r = await require(FN).handler({
+    requestContext: { http: { method: "POST", sourceIp: "192.0.2.44" } },
+    headers: { "content-type": "application/json" },
+    isBase64Encoded: true,
+    body: Buffer.from(JSON.stringify(VALID)).toString("base64"),
+  });
+  pass("AWS v2 event (base64 body) accepted and sent", r.statusCode === 200 && captured.length === 1);
+  pass("AWS v2 source IP recorded", (captured[0] || "").includes("192.0.2.44"));
+
+  r = await require(FN).handler({ requestContext: { http: { method: "GET" } }, headers: {} });
+  pass("AWS v2 GET rejected (405)", r.statusCode === 405);
 
   // --- the happy path -------------------------------------------------
   captured = [];
@@ -182,6 +202,17 @@ const VALID = {
   await call(VALID, ip);
   r = await call(VALID, ip);
   pass("rapid repeat from one IP throttled (429)", r.statusCode === 429);
+
+  // --- receipt (MAIL_ACK) ----------------------------------------------
+  process.env.MAIL_ACK = "true"; reload();
+  captured = [];
+  r = await call(Object.assign({}, VALID, { kind: "quote", reference: "BLN-Q-1", quote: "TOTAL: R 1" }));
+  const receipt = split(captured[1] || "");
+  pass("quote with MAIL_ACK sends lead and receipt", r.statusCode === 200 && captured.length === 2);
+  pass("receipt goes to the visitor", /^To:.*t@meridian\.co\.za/mi.test(receipt.headers));
+  pass("receipt names the quotation", decodeSubject(receipt.headers).includes("BLN-Q-1"));
+  pass("receipt greets by first name", (captured[1] || "").includes("Hi Thabo,"));
+  process.env.MAIL_ACK = "false"; reload();
 
   // --- misconfiguration -------------------------------------------------
   const keep = process.env.SMTP_PASS; delete process.env.SMTP_PASS; reload();

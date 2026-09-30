@@ -165,7 +165,7 @@ Google will not accept your normal account password from a script.
 | `SMTP_PASS` | the 16-character app password |
 | `MAIL_FROM` | `"Bulan website <hello@bulan.co.za>"` |
 | `MAIL_TO` | where leads should land |
-| `ALLOWED_ORIGIN` | `https://www.bulan.co.za` once the domain is live |
+| `ALLOWED_ORIGIN` | `https://www.bulan.co.za` once the domain is live. Comma-separate several (`https://bulan.co.za,https://www.bulan.co.za`) if both resolve. |
 | `MAIL_ACK` | `false` — see below |
 
 > **`MAIL_FROM` must be your own domain.** Sending "from" the visitor's address
@@ -211,12 +211,34 @@ and you want the site to keep collecting enquiries while you fix it.
 
 The site is static files. Anywhere that serves static files will work.
 
-### Netlify (required, now that email runs through a function)
+### Netlify (simplest — the mail function runs with no extra setup)
 Connect the git repository. `netlify.toml` already declares the publish directory
 and the functions folder, so there is nothing to configure in the UI except the
 environment variables in section 3.2. `_headers` and `_redirects` are picked up
 automatically, which is also why Netlify beats GitHub Pages here — Pages ignores
 both, so you would lose the CSP, HSTS and the clean URLs.
+
+### AWS (S3 + CloudFront + Lambda)
+The mail function is portable: `netlify/functions/contact.js` accepts both the
+Netlify / API Gateway REST event and the Lambda Function URL / HTTP API (v2) event,
+and `npm test` covers both. Moving to AWS is configuration, not a rewrite:
+
+1. **Static files → S3**, served through **CloudFront** (Origin Access Control, bucket
+   not public). Upload everything except `netlify/`, `tests/`, `node_modules/` and the
+   repo files listed at the top of `_redirects`.
+2. **Function → Lambda** (Node 18+). Zip `netlify/functions/contact.js` with
+   `node_modules/`, handler `contact.handler`. Put it behind an API Gateway HTTP API
+   or a Function URL.
+3. **Same origin.** Add a CloudFront behaviour `/api/contact` → the Lambda origin,
+   and set `formEndpoint: "/api/contact"` in `assets/js/config.js`. The form then
+   posts to your own domain, so the CSP (`connect-src 'self'`) and CORS need no change.
+4. **Variables** from §3.2 go on the Lambda (or in Secrets Manager). Nothing in git.
+5. **Mail:** Gmail SMTP keeps working, or switch to **Amazon SES** by changing only
+   `SMTP_HOST` (`email-smtp.af-south-1.amazonaws.com`), `SMTP_USER` and `SMTP_PASS`
+   (SES SMTP credentials). Verify the domain in SES and leave the sandbox first.
+6. **`_headers` and `_redirects` are Netlify-only.** Recreate the headers as a
+   CloudFront *response headers policy*, the clean URLs as a small CloudFront Function,
+   and set the custom error response for 403/404 to `/404.html`.
 
 ### GitHub Pages
 Serves the static pages fine, including from a project subdirectory
