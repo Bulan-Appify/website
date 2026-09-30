@@ -207,7 +207,8 @@
                  'Received: ' + new Date().toLocaleString('en-ZA');
 
       window.BULAN_FORM
-        .send(cform, 'Website enquiry — ' + (d.get('company') || d.get('name') || 'New lead'), body)
+        .send(cform, 'Website enquiry — ' + (d.get('company') || d.get('name') || 'New lead'), body,
+              { kind: cform.getAttribute('data-kind') || 'enquiry' })
         .then(function () {
           cform.hidden = true;
           var ok = $('#contact-success');

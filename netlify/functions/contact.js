@@ -1,18 +1,25 @@
 /* ============================================================
    Bulan — contact / quotation mail endpoint.
 
-   POST /.netlify/functions/contact
+   POST /.netlify/functions/contact   (Netlify)
+   POST /api/contact                  (AWS: Lambda behind CloudFront)
+
+   The same file runs on both. Netlify Functions and API Gateway REST
+   APIs send the "v1" event shape; Lambda Function URLs and API Gateway
+   HTTP APIs send "v2". The handler normalises either. See README §4.
 
    Handles both the enquiry form and the quote builder. Everything
    the client sends is treated as untrusted: validated, length-capped
    and escaped before it reaches an email body.
 
    Configuration is entirely environment variables — set them in
-   Netlify under Site configuration → Environment variables. Nothing
+   Netlify under Site configuration → Environment variables (or on the
+   Lambda function when hosted on AWS). Nothing
    secret belongs in this file or in git. See .env.example.
    ============================================================ */
 
 const nodemailer = require("nodemailer");
+const { KINDS, cleanSummary, lead, receipt, oneLine } = require("../lib/mail-templates");
 
 /* --- Configuration ---------------------------------------- */
 const {
@@ -22,9 +29,11 @@ const {
   SMTP_PASS,
   MAIL_FROM,               // e.g. "Bulan website <hello@bulan.co.za>"
   MAIL_TO,                 // where leads land
-  MAIL_ACK = "false",      // send the sender a receipt? see note below
-  ALLOWED_ORIGIN = "",     // e.g. "https://www.bulan.co.za"
+  MAIL_ACK = "true",       // send the visitor a receipt; "false" turns it off
+  ALLOWED_ORIGIN = "",     // e.g. "https://www.bulan.co.za" — comma-separate several
 } = process.env;
+
+const ORIGINS = ALLOWED_ORIGIN.split(",").map((o) => o.trim()).filter(Boolean);
 
 /* Field limits. Generous for humans, hostile to anyone pasting a
    novel into the message box to run up our send quota. */
@@ -38,14 +47,9 @@ const REQUIRED = ["name", "email"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 /* --- Helpers ----------------------------------------------- */
-const esc = (s) =>
-  String(s == null ? "" : s).replace(/[&<>"']/g, (c) => (
-    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
-  ));
-
-/* Header injection guard: a newline in a subject or a name lets an
-   attacker append their own headers. Strip CR/LF anywhere near one. */
-const oneLine = (s) => String(s || "").replace(/[\r\n]+/g, " ").trim();
+/* oneLine (from the templates) is the header-injection guard: a
+   newline in a subject or a name lets an attacker append their own
+   headers, so CR/LF is stripped from anything near one. */
 
 const json = (statusCode, body) => ({
   statusCode,
@@ -72,12 +76,18 @@ function throttled(ip) {
 
 /* --- Handler ----------------------------------------------- */
 exports.handler = async (event) => {
-  if (event.httpMethod === "OPTIONS") return json(204, {});
-  if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
+  const rc = event.requestContext || {};
+  const method = event.httpMethod || (rc.http && rc.http.method) || "";
+  // v2 lowercases header names; v1 may not. Lowercase once, read once.
+  const headers = {};
+  for (const [k, v] of Object.entries(event.headers || {})) headers[k.toLowerCase()] = v;
+
+  if (method === "OPTIONS") return json(204, {});
+  if (method !== "POST") return json(405, { error: "Method not allowed" });
 
   // Same-origin only. The form is on our own site; anything else is abuse.
-  const origin = event.headers.origin || event.headers.Origin || "";
-  if (ALLOWED_ORIGIN && origin && origin !== ALLOWED_ORIGIN) {
+  const origin = headers.origin || "";
+  if (ORIGINS.length && origin && !ORIGINS.includes(origin)) {
     return json(403, { error: "Forbidden" });
   }
 
@@ -88,7 +98,10 @@ exports.handler = async (event) => {
 
   let data;
   try {
-    data = JSON.parse(event.body || "{}");
+    const raw = event.isBase64Encoded
+      ? Buffer.from(event.body || "", "base64").toString("utf8")
+      : event.body;
+    data = JSON.parse(raw || "{}");
   } catch {
     return json(400, { error: "Malformed request." });
   }
@@ -98,8 +111,10 @@ exports.handler = async (event) => {
   if (data._gotcha) return json(200, { ok: true });
 
   const ip =
-    (event.headers["x-nf-client-connection-ip"] ||
-     (event.headers["x-forwarded-for"] || "").split(",")[0] ||
+    (headers["x-nf-client-connection-ip"] ||
+     (headers["x-forwarded-for"] || "").split(",")[0] ||
+     (rc.http && rc.http.sourceIp) ||
+     (rc.identity && rc.identity.sourceIp) ||
      "unknown").trim();
   if (throttled(ip)) return json(429, { error: "Please wait a moment before sending again." });
 
@@ -127,53 +142,17 @@ exports.handler = async (event) => {
   if (!EMAIL_RE.test(f.email)) return json(400, { error: "That email address does not look valid.", fields: ["email"] });
   if (!data.consent) return json(400, { error: "Consent is required so that we may reply.", fields: ["consent"] });
 
-  const isQuote = data.kind === "quote";
-  const who = oneLine(f.company || f.name);
-  const subject = isQuote
-    ? `Quotation ${oneLine(f.reference) || ""} — ${who}`.replace(/\s+/g, " ").trim()
-    : `Website enquiry — ${who}`;
+  const kind = KINDS.includes(data.kind) ? data.kind : "enquiry";
+  const summary = kind === "quote" ? cleanSummary(data.summary) : null;
 
-  /* --- Compose ------------------------------------------- */
-  const ORDER = [
-    ["name", "Name"], ["role", "Job title"], ["company", "Company"],
-    ["email", "Email"], ["phone", "Phone"], ["country", "Country"],
-    ["services", "Services"], ["budget", "Budget"], ["timeline", "Timeline"],
-    ["heard", "Found us via"], ["reference", "Quotation ref"],
-  ];
-  const rows = ORDER.filter(([k]) => f[k]);
-  const body = f.message || f.notes || "";
+  // Serverless runtimes run in UTC. Stamp the mail in the office's own
+  // time so "received 09:11" does not really mean 11:11 SAST.
+  const received = new Date().toLocaleString("en-ZA", {
+    timeZone: "Africa/Johannesburg", dateStyle: "medium", timeStyle: "short",
+  }) + " SAST";
+  const site = ORIGINS.length ? ORIGINS[0].replace(/^https?:\/\//, "") : "the Bulan website";
 
-  const text = [
-    isQuote ? "PRO-FORMA QUOTATION REQUEST" : "NEW ENQUIRY",
-    "".padEnd(46, "-"),
-    ...rows.map(([k, label]) => `${label}: ${f[k]}`),
-    body ? `\n${isQuote ? "Notes" : "Brief"}:\n${body}` : "",
-    f.quote ? `\nQuotation breakdown:\n${f.quote}` : "",
-    `\nReceived: ${new Date().toISOString()}`,
-    `Source IP: ${ip}`,
-  ].filter(Boolean).join("\n");
-
-  const html = `<!doctype html><meta charset="utf-8">
-<div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#10151F;max-width:640px">
-  <p style="font:600 11px/1 monospace;letter-spacing:.14em;text-transform:uppercase;color:#6B7688;margin:0 0 6px">
-    ${isQuote ? "Pro-forma quotation request" : "New enquiry"}
-  </p>
-  <h2 style="margin:0 0 18px;font-size:19px;letter-spacing:-.02em">${esc(who)}</h2>
-  <table style="border-collapse:collapse;font-size:14px;width:100%">
-    ${rows.map(([k, label]) => `<tr>
-      <th style="text-align:left;padding:7px 18px 7px 0;color:#6B7688;font-weight:500;white-space:nowrap;vertical-align:top">${label}</th>
-      <td style="padding:7px 0;border-bottom:1px solid #EDF0F5">${
-        k === "email" ? `<a href="mailto:${esc(f[k])}">${esc(f[k])}</a>` : esc(f[k])
-      }</td></tr>`).join("")}
-  </table>
-  ${body ? `<h3 style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6B7688;margin:26px 0 8px">${isQuote ? "Notes" : "Brief"}</h3>
-  <div style="font-size:14px;line-height:1.65;white-space:pre-wrap">${esc(body)}</div>` : ""}
-  ${f.quote ? `<h3 style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6B7688;margin:26px 0 8px">Quotation breakdown</h3>
-  <pre style="font-size:12.5px;line-height:1.6;background:#F5F7FB;padding:14px;border-radius:8px;white-space:pre-wrap;margin:0">${esc(f.quote)}</pre>` : ""}
-  <p style="font-size:12px;color:#8A93A3;margin-top:28px;border-top:1px solid #EDF0F5;padding-top:12px">
-    Sent from the Bulan website · ${esc(new Date().toLocaleString("en-ZA"))} · IP ${esc(ip)}
-  </p>
-</div>`;
+  const leadMail = lead({ kind, f, summary, received, ip, site });
 
   /* --- Send ---------------------------------------------- */
   const port = Number(SMTP_PORT) || 587;
@@ -195,30 +174,34 @@ exports.handler = async (event) => {
       from: MAIL_FROM || `Bulan website <${SMTP_USER}>`,
       to: MAIL_TO,
       replyTo: `${oneLine(f.name)} <${f.email}>`,
-      subject: oneLine(subject),
-      text,
-      html,
+      subject: oneLine(leadMail.subject),
+      text: leadMail.text,
+      html: leadMail.html,
     });
-
-    /* An acknowledgement is deliberately OFF by default. The site
-       promises "a considered human reply, not an auto-responder", and
-       an instant templated email undercuts exactly that claim. Set
-       MAIL_ACK=true only if you decide a delivery receipt is worth it. */
-    if (MAIL_ACK === "true") {
-      await transporter.sendMail({
-        from: MAIL_FROM || `Bulan <${SMTP_USER}>`,
-        to: f.email,
-        subject: "We have your message — Bulan",
-        text: `Hi ${oneLine(f.name)},\n\nThis is a delivery receipt, not our reply.\n\n`
-            + `We have your message and an engineer will respond within one business day.\n\n`
-            + `— Bulan\n`,
-      });
-    }
-
-    return json(200, { ok: true });
   } catch (err) {
     // Log the detail for us; tell the visitor nothing about our infrastructure.
     console.error("sendMail failed:", err && err.message);
     return json(502, { error: "We could not send that just now. Please email us directly." });
   }
+
+  /* The receipt. The lead has already reached us, so a failure here
+     is logged and swallowed: reporting it as an error would make the
+     visitor send the same brief twice. */
+  if (MAIL_ACK !== "false") {
+    const ack = receipt({ kind, f, site });
+    try {
+      await transporter.sendMail({
+        from: MAIL_FROM || `Bulan <${SMTP_USER}>`,
+        to: f.email,
+        replyTo: MAIL_TO,
+        subject: oneLine(ack.subject),
+        text: ack.text,
+        html: ack.html,
+      });
+    } catch (err) {
+      console.error("receipt failed:", err && err.message);
+    }
+  }
+
+  return json(200, { ok: true });
 };

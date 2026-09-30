@@ -401,6 +401,20 @@
     return o;
   }
 
+  /* The figures behind the pro-forma, for the email Bulan receives. The
+     server shape-checks them and lays them out; plainText() below stays
+     as the fallback and as the body of the manual mailto send. */
+  function summary(q) {
+    var tl = TIMELINES.filter(function (t) { return t.id === state.timeline; })[0];
+    return {
+      lines: q.lines.map(function (l) { return { name: l.name, note: l.note, amount: l.amount }; }),
+      adjustments: q.adjustments.map(function (a) { return { name: a.name, amount: a.amount }; }),
+      net: q.net, vat: q.vat, total: q.total, vatCharged: !!C.chargeVat,
+      timeline: tl ? tl.name : state.timeline, months: state.months, care: !!state.care,
+      hasRecurring: q.monthly > 0
+    };
+  }
+
   function plainText(q, d) {
     var L = [];
     L.push('PRO-FORMA QUOTATION ' + reference);
@@ -441,7 +455,7 @@
       window.BULAN_FORM.send($('#qb-details'),
         'Pro-forma generated ' + reference + ' — ' + (d.company || d.name),
         plainText(q, d),
-        { kind: 'quote', reference: reference, quote: plainText(q, d) }
+        { kind: 'quote', reference: reference, quote: plainText(q, d), summary: summary(q) }
       ).catch(function () {
         // The quotation itself is already on screen and downloadable, so a
         // failed notification must not look like a failed quotation. Fall
