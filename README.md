@@ -188,14 +188,39 @@ Google will not accept your normal account password from a script.
 
 ### 3.3 Test it locally
 
+Needs Node 18 or later. Nothing else to install.
+
 ```powershell
 npm install
-copy .env.example .env      # then fill in the real values
-npx netlify dev             # serves the site AND the function
+copy .env.example .env      # then change the lines marked ◄ CHANGE
+npm run mail:check          # logs in to Gmail and sends a test brief + receipt
+npm run dev                 # the site with live mail on http://localhost:8888
 ```
 
-Leave `ALLOWED_ORIGIN` blank in `.env` while testing from localhost, or the
-function will reject your own requests.
+`npm run mail:check` is the first thing to run when a form says it sent but no
+email arrived. It shows the settings it read (password masked), logs in, and
+explains a refusal in plain words. `npm run mail:check -- you@example.com` also
+sends the receipt to that address.
+
+`npm run dev` ignores `ALLOWED_ORIGIN`, since the page is on localhost. To use
+the Netlify CLI instead, `npm run dev:netlify`.
+
+### 3.3a No email on Netlify? Check in this order
+
+1. **Did the form show an error?** "That did not send" means the function failed:
+   open **Logs → Functions → contact**. No error means it sent; check Spam.
+2. **Redeploy after changing variables.** They only apply to the next deploy:
+   **Deploys → Trigger deploy → Deploy site**.
+3. **`ALLOWED_ORIGIN` must be empty** until the real domain is live. Set to
+   `https://www.bulan.co.za`, it refuses every post from a `*.netlify.app` link
+   (the log says "Rejected a form post from …").
+4. **Scopes.** Each variable must include the **Functions** scope and the deploy
+   context you are testing (Production, or Deploy Previews).
+5. **`SMTP_PASS` is an app password**, and `MAIL_FROM` uses the same address as
+   `SMTP_USER`. Run `npm run mail:check` locally with the same values to confirm.
+
+The log shows `brief lead sent to …` and `receipt sent to …` for every
+successful send.
 
 ### 3.4 What the function does
 

@@ -22,6 +22,15 @@ const nodemailer = require("nodemailer");
 const { KINDS, cleanSummary, lead, receipt, oneLine } = require("../lib/mail-templates");
 
 /* --- Configuration ---------------------------------------- */
+/* Values pasted into the Netlify UI often keep the quotes from a .env
+   file, and Google shows app passwords in groups of four. Both break the
+   login or the From address silently, so normalise them here. */
+const unquote = (v) => (typeof v === "string" ? v.trim().replace(/^(["'])(.*)\1$/, "$2") : v);
+for (const k of ["SMTP_HOST", "SMTP_PORT", "SMTP_USER", "SMTP_PASS", "MAIL_FROM", "MAIL_TO", "MAIL_ACK", "ALLOWED_ORIGIN"]) {
+  if (process.env[k] !== undefined) process.env[k] = unquote(process.env[k]);
+}
+if (process.env.SMTP_PASS) process.env.SMTP_PASS = process.env.SMTP_PASS.replace(/\s+/g, "");
+
 const {
   SMTP_HOST = "smtp.gmail.com",
   SMTP_PORT = "587",
@@ -88,6 +97,7 @@ exports.handler = async (event) => {
   // Same-origin only. The form is on our own site; anything else is abuse.
   const origin = headers.origin || "";
   if (ORIGINS.length && origin && !ORIGINS.includes(origin)) {
+    console.warn(`Rejected a form post from ${origin}: ALLOWED_ORIGIN is "${ALLOWED_ORIGIN}".`);
     return json(403, { error: "Forbidden" });
   }
 
@@ -178,6 +188,7 @@ exports.handler = async (event) => {
       text: leadMail.text,
       html: leadMail.html,
     });
+    console.info(`${kind} lead sent to ${MAIL_TO}`);
   } catch (err) {
     // Log the detail for us; tell the visitor nothing about our infrastructure.
     console.error("sendMail failed:", err && err.message);
@@ -198,6 +209,7 @@ exports.handler = async (event) => {
         text: ack.text,
         html: ack.html,
       });
+      console.info(`receipt sent to ${f.email}`);
     } catch (err) {
       console.error("receipt failed:", err && err.message);
     }
