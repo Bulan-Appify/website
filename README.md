@@ -235,8 +235,9 @@ and `npm test` covers both. Moving to AWS is configuration, not a rewrite:
 1. **Static files → S3**, served through **CloudFront** (Origin Access Control, bucket
    not public). Upload everything except `netlify/`, `tests/`, `node_modules/` and the
    repo files listed at the top of `_redirects`.
-2. **Function → Lambda** (Node 18+). Zip `netlify/functions/contact.js` with
-   `node_modules/`, handler `contact.handler`. Put it behind an API Gateway HTTP API
+2. **Function → Lambda** (Node 18+). Zip the `netlify/` folder (the function
+   requires `netlify/lib/mail-templates.js`) with `node_modules/`, handler
+   `netlify/functions/contact.handler`. Put it behind an API Gateway HTTP API
    or a Function URL.
 3. **Same origin.** Add a CloudFront behaviour `/api/contact` → the Lambda origin,
    and set `formEndpoint: "/api/contact"` in `assets/js/config.js`. The form then
