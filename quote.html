@@ -269,17 +269,17 @@
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg>
             </div>
             <h2 class="qb-h">Your pro-forma quotation is ready.</h2>
-            <p class="qb-sub center-x mi-auto">Prepared for <strong id="qb-final-name">you</strong> — total <strong id="qb-final-total">&mdash;</strong>. Download it, print it to PDF, or email it to yourself.</p>
+            <p class="qb-sub center-x mi-auto">Prepared for <strong id="qb-final-name">you</strong> — total <strong id="qb-final-total">&mdash;</strong>. Download it as a PDF, or have it emailed to you.</p>
             <p class="qb-ref" id="qb-ref">BLN-0000</p>
 
             <div class="notice notice--ok mt-32 ta-left" id="qb-sent-auto" hidden>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>
-              <p>A copy is on its way to us, and a receipt with your reference to you. An engineer will follow up within one business day &mdash; once, by a human, not by an automated sequence.</p>
+              <p>Your quotation has been emailed to <strong id="qb-sent-to">you</strong>, and a copy is with us. An engineer will follow up within one business day &mdash; once, by a human, not by an automated sequence.</p>
             </div>
 
             <div class="notice notice--info mt-32 ta-left" id="qb-send-wrap">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
-              <p>The quotation is yours to keep either way. If you would like us to pick it up and follow up, send it across &mdash; it opens in your own email client so you can see exactly what is being sent.</p>
+              <p>The quotation is yours to keep either way. If you would like us to pick it up and follow up, send it across.</p>
             </div>
 
             <div class="qb-actions">
@@ -294,6 +294,7 @@
               <button class="btn btn-ghost btn-lg" type="button" id="qb-email">Email it to me</button>
               <button class="btn btn-quiet" type="button" id="qb-restart">Start over</button>
             </div>
+            <p class="qb-status" id="qb-email-status" role="status" aria-live="polite" hidden></p>
 
             <div class="notice notice--info mt-48 ta-left">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -487,6 +488,7 @@
 </footer>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/main.js"></script>
+<script src="assets/js/pricing.js"></script>
 <script src="assets/js/quote.js"></script>
 </body>
 </html>

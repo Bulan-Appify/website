@@ -19,7 +19,10 @@
    ============================================================ */
 
 const nodemailer = require("nodemailer");
-const { KINDS, cleanSummary, lead, receipt, oneLine } = require("../lib/mail-templates");
+const { KINDS, REF_RE, lead, receipt, quotation, oneLine } = require("../lib/mail-templates");
+// The site's own price list and company details, shared with the browser.
+const pricing = require("../../assets/js/pricing.js");
+const siteConfig = require("../../assets/js/config.js");
 
 /* --- Configuration ---------------------------------------- */
 /* Values pasted into the Netlify UI often keep the quotes from a .env
@@ -82,6 +85,16 @@ function throttled(ip) {
   seen.set(ip, now);
   return last != null && now - last < 8_000;
 }
+
+/* One email to the same visitor address per minute, whatever the IP.
+   Stops the "email it to me" button being used to flood one inbox. */
+const mailedTo = new Map();
+function recentlyMailed(address) {
+  const now = Date.now(), key = address.toLowerCase();
+  for (const [k, t] of mailedTo) if (now - t > 60_000) mailedTo.delete(k);
+  return mailedTo.has(key);
+}
+const markMailed = (address) => mailedTo.set(address.toLowerCase(), Date.now());
 
 /* --- Handler ----------------------------------------------- */
 exports.handler = async (event) => {
@@ -152,8 +165,38 @@ exports.handler = async (event) => {
   if (!EMAIL_RE.test(f.email)) return json(400, { error: "That email address does not look valid.", fields: ["email"] });
   if (!data.consent) return json(400, { error: "Consent is required so that we may reply.", fields: ["consent"] });
 
-  const kind = KINDS.includes(data.kind) ? data.kind : "enquiry";
-  const summary = kind === "quote" ? cleanSummary(data.summary) : null;
+  /* kind says which form sent this:
+       brief       contact.html              → lead to Bulan + confirmation to visitor
+       quote       quote builder, generated  → lead to Bulan + quotation to visitor
+       quote-copy  "Email it to me" button   → quotation to visitor only
+       enquiry     anything else             → lead to Bulan + confirmation to visitor */
+  const copyOnly = data.kind === "quote-copy";
+  const kind = copyOnly ? "quote" : KINDS.includes(data.kind) ? data.kind : "enquiry";
+
+  // Quotations are priced here, from pricing.js, never from figures the
+  // browser sends. The email then shows Bulan's own prices whatever the
+  // request contained.
+  let q = null, reference = "";
+  if (kind === "quote") {
+    const sel = data.selection && typeof data.selection === "object" ? data.selection : {};
+    q = pricing.compute({
+      items: (Array.isArray(sel.items) ? sel.items : []).slice(0, 60).map(String),
+      timeline: String(sel.timeline || ""), months: sel.months, care: sel.care === true,
+    }, siteConfig);
+    if (!q.lines.length) return json(400, { error: "Select at least one item for the quotation.", fields: ["selection"] });
+    reference = REF_RE.test(f.reference || "") ? f.reference
+      : `BLN-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9000) + 1000)}`;
+    f.reference = reference;
+  }
+  const summary = q && {
+    lines: q.lines, adjustments: q.adjustments, total: q.total, net: q.net, vat: q.vat,
+    vatCharged: !!siteConfig.chargeVat, timeline: q.timeline.name, months: q.months,
+    care: q.care, hasRecurring: q.monthly > 0,
+  };
+
+  if (copyOnly && recentlyMailed(f.email)) {
+    return json(429, { error: "We emailed this address a moment ago. Check your inbox and spam folder, or try again in a minute." });
+  }
 
   // Serverless runtimes run in UTC. Stamp the mail in the office's own
   // time so "received 09:11" does not really mean 11:11 SAST.
@@ -161,8 +204,6 @@ exports.handler = async (event) => {
     timeZone: "Africa/Johannesburg", dateStyle: "medium", timeStyle: "short",
   }) + " SAST";
   const site = ORIGINS.length ? ORIGINS[0].replace(/^https?:\/\//, "") : "the Bulan website";
-
-  const leadMail = lead({ kind, f, summary, received, ip, site });
 
   /* --- Send ---------------------------------------------- */
   const port = Number(SMTP_PORT) || 587;
@@ -176,44 +217,54 @@ exports.handler = async (event) => {
     socketTimeout: 15_000,
   });
 
-  try {
-    await transporter.sendMail({
-      // From must be our own domain or SPF and DKIM fail and the mail
-      // is filed as spam. The visitor goes in Reply-To instead, so
-      // hitting reply in the inbox still reaches them.
-      from: MAIL_FROM || `Bulan website <${SMTP_USER}>`,
-      to: MAIL_TO,
-      replyTo: `${oneLine(f.name)} <${f.email}>`,
-      subject: oneLine(leadMail.subject),
-      text: leadMail.text,
-      html: leadMail.html,
-    });
-    console.info(`${kind} lead sent to ${MAIL_TO}`);
-  } catch (err) {
-    // Log the detail for us; tell the visitor nothing about our infrastructure.
-    console.error("sendMail failed:", err && err.message);
-    return json(502, { error: "We could not send that just now. Please email us directly." });
+  if (!copyOnly) {
+    const leadMail = lead({ kind, f, summary, received, ip, site });
+    try {
+      await transporter.sendMail({
+        // From must be our own domain or SPF and DKIM fail and the mail
+        // is filed as spam. The visitor goes in Reply-To instead, so
+        // hitting reply in the inbox still reaches them.
+        from: MAIL_FROM || `Bulan website <${SMTP_USER}>`,
+        to: MAIL_TO,
+        replyTo: `${oneLine(f.name)} <${f.email}>`,
+        subject: oneLine(leadMail.subject),
+        text: leadMail.text,
+        html: leadMail.html,
+      });
+      console.info(`${kind} lead sent to ${MAIL_TO}`);
+    } catch (err) {
+      // Log the detail for us; tell the visitor nothing about our infrastructure.
+      console.error("sendMail failed:", err && err.message);
+      return json(502, { error: "We could not send that just now. Please email us directly." });
+    }
   }
 
-  /* The receipt. The lead has already reached us, so a failure here
-     is logged and swallowed: reporting it as an error would make the
-     visitor send the same brief twice. */
-  if (MAIL_ACK !== "false") {
-    const ack = receipt({ kind, f, site });
+  /* The visitor's copy: their quotation, or a confirmation of their brief.
+     Sent automatically unless MAIL_ACK=false; the "Email it to me" button
+     always sends. After a lead, a failure here is logged and swallowed,
+     since reporting it would make the visitor send the same brief twice. */
+  let visitorSent = false;
+  if (copyOnly || MAIL_ACK !== "false") {
+    const mail = kind === "quote"
+      ? quotation({ f, q, reference, cfg: siteConfig, site })
+      : receipt({ kind, f, site });
     try {
       await transporter.sendMail({
         from: MAIL_FROM || `Bulan <${SMTP_USER}>`,
         to: f.email,
         replyTo: MAIL_TO,
-        subject: oneLine(ack.subject),
-        text: ack.text,
-        html: ack.html,
+        subject: oneLine(mail.subject),
+        text: mail.text,
+        html: mail.html,
       });
-      console.info(`receipt sent to ${f.email}`);
+      markMailed(f.email);
+      visitorSent = true;
+      console.info(`${kind === "quote" ? "quotation" : "confirmation"} sent to ${f.email}`);
     } catch (err) {
-      console.error("receipt failed:", err && err.message);
+      console.error("visitor copy failed:", err && err.message);
+      if (copyOnly) return json(502, { error: "We could not email the quotation just now. Download it instead, or try again shortly." });
     }
   }
 
-  return json(200, { ok: true });
+  return json(200, { ok: true, reference: reference || undefined, emailedVisitor: visitorSent });
 };

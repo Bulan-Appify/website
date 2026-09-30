@@ -172,12 +172,22 @@ Google will not accept your normal account password from a script.
 > fails SPF and DKIM and lands the mail in spam. The function puts the visitor in
 > `Reply-To`, so hitting reply in your inbox still reaches them.
 
-> **The receipt is on.** The visitor gets an instant email saying their brief or
-> quotation request arrived and that a person will reply within one business day.
-> The site copy says the same, so the receipt does not contradict the "human reply"
-> promise. Because anyone can type any address into a form, the receipt repeats
-> only the first name and a validated `BLN-YYYY-NNNN` reference — no message,
-> company or figures — so it is useless for relaying spam.
+> **The visitor gets their copy automatically.** Nothing opens the visitor's own
+> mail client any more (unless `formMode` is `"mailto"`).
+> - **Quote builder:** generating the quotation emails Bulan the lead and emails the
+>   visitor the full pro-forma: lines, total, payment terms, banking details and the
+>   "not a tax invoice" wording. **Email it to me** sends it again (once a minute at
+>   most per address). The server prices it from `assets/js/pricing.js`, never from
+>   figures the browser sends, so an email under the Bulan name always carries
+>   Bulan's own prices.
+> - **Brief form:** the visitor gets a confirmation listing the options they picked
+>   (services, budget, start, location), checked against the form's own lists.
+>
+> Anyone can type any address into a form, so these emails never repeat the
+> visitor's free-text message or notes, strip anything link-like from the name and
+> company, and leave out config values that are still `TODO` placeholders. That
+> keeps the forms useless for sending someone else's words through Bulan's mail.
+> `MAIL_ACK=false` stops the automatic copies; the button still works.
 >
 > **One template per form.** `netlify/lib/mail-templates.js` builds the emails.
 > The contact form sends `kind: "brief"` (from `data-kind` on the `<form>`), the
@@ -260,9 +270,9 @@ and `npm test` covers both. Moving to AWS is configuration, not a rewrite:
 1. **Static files → S3**, served through **CloudFront** (Origin Access Control, bucket
    not public). Upload everything except `netlify/`, `tests/`, `node_modules/` and the
    repo files listed at the top of `_redirects`.
-2. **Function → Lambda** (Node 18+). Zip the `netlify/` folder (the function
-   requires `netlify/lib/mail-templates.js`) with `node_modules/`, handler
-   `netlify/functions/contact.handler`. Put it behind an API Gateway HTTP API
+2. **Function → Lambda** (Node 18+). Zip the `netlify/` folder, `assets/js/pricing.js`
+   and `assets/js/config.js` (the function requires all three) with `node_modules/`,
+   keeping their paths, handler `netlify/functions/contact.handler`. Put it behind an API Gateway HTTP API
    or a Function URL.
 3. **Same origin.** Add a CloudFront behaviour `/api/contact` → the Lambda origin,
    and set `formEndpoint: "/api/contact"` in `assets/js/config.js`. The form then
@@ -313,7 +323,10 @@ ErrorDocument 404 /404.html
 
 `/quote.html`, driven by `assets/js/quote.js`.
 
-**All prices live in the `CATALOG` array at the top of that file.** Each line is:
+**All prices live in the `CATALOG` array at the top of `assets/js/pricing.js`.** The
+browser and the mail function both read that file, and the server recalculates every
+quotation from the item ids, so the figures emailed under the Bulan name are always
+Bulan's own. Each line is:
 
 ```js
 { id: 'dev-web-s', name: 'Web application — compact', desc: '…', price: 185000 }
@@ -325,7 +338,7 @@ ErrorDocument 404 /404.html
 Below the catalogue: `TIMELINES` (the ±% modifiers), `CARE` (the 15% care plan) and
 `BUNDLE` (the 7% discount for three or more disciplines).
 
-> **If you change a price in `quote.js`, change it on the service page too.** The figures
+> **If you change a price in `pricing.js`, change it on the service page too.** The figures
 > are deliberately duplicated in the HTML so they are indexable by search engines. They
 > appear on the four `services/*.html` pages, `services.html`, and in the FAQ answers on
 > `index.html`.
@@ -364,7 +377,8 @@ assets/css/forms.css       Forms, quote builder, articles, legal pages
 assets/css/proforma.css    The printable quotation document
 assets/js/config.js        ►► YOUR BUSINESS DETAILS ◄◄
 assets/js/main.js          Nav, accordions, reveal, form handling
-assets/js/quote.js         ►► YOUR PRICES ◄◄
+assets/js/pricing.js       ►► YOUR PRICES ◄◄ (shared with the mail function)
+assets/js/quote.js         The quote builder UI
 ```
 
 ### Changing the navigation or footer

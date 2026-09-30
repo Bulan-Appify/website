@@ -58,6 +58,9 @@
 
 /* --- 2. Reset -------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
+/* Components set their own display (.btn is inline-flex), which would
+   otherwise beat the hidden attribute and leave "hidden" buttons showing. */
+[hidden] { display: none !important; }
 * { margin: 0; }
 html {
   -webkit-text-size-adjust: 100%;
