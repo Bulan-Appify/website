@@ -6,9 +6,10 @@
  * validation, header safety, escaping and composition are exercised for
  * real. No credentials and no network: nothing leaves the machine.
  *
- * The "Mail endpoint is not configured" line near the end is expected —
- * it is the last case deliberately removing the password to prove a
- * misconfiguration returns 500 rather than crashing.
+ * Two log lines are expected: "receipt failed" is the case proving a
+ * bounced receipt still reports success, and "Mail endpoint is not
+ * configured" is the last case deliberately removing the password to
+ * prove a misconfiguration returns 500 rather than crashing.
  */
 const net = require("net");
 const path = require("path");
@@ -34,6 +35,8 @@ const server = net.createServer((sock) => {
       const cmd = line.toUpperCase();
       if (cmd.startsWith("EHLO") || cmd.startsWith("HELO")) sock.write("250-localhost\r\n250 AUTH PLAIN LOGIN\r\n");
       else if (cmd.startsWith("AUTH")) sock.write("235 Authentication successful\r\n");
+      // An address containing "bounce" is refused, to exercise a failed receipt.
+      else if (cmd.startsWith("RCPT TO") && cmd.includes("BOUNCE")) sock.write("550 No such user\r\n");
       else if (cmd.startsWith("MAIL FROM") || cmd.startsWith("RCPT TO")) sock.write("250 OK\r\n");
       else if (cmd === "DATA") { inData = true; sock.write("354 End data with <CR><LF>.<CR><LF>\r\n"); }
       else if (cmd === "QUIT") { sock.write("221 Bye\r\n"); sock.end(); }
@@ -203,16 +206,68 @@ const VALID = {
   r = await call(VALID, ip);
   pass("rapid repeat from one IP throttled (429)", r.statusCode === 429);
 
-  // --- receipt (MAIL_ACK) ----------------------------------------------
+  // --- one template per form -------------------------------------------
+  const SUMMARY = {
+    lines: [{ name: "Mobile app (iOS + Android)", note: "Software Development", amount: 320000 }],
+    adjustments: [{ name: "Integrated delivery discount (3 disciplines)", amount: -22400 }],
+    net: 297600, vat: 0, total: 297600, vatCharged: false,
+    timeline: "Standard", months: 6, care: false, hasRecurring: false,
+  };
+  const subjectOf = (raw) => decodeSubject(split(raw || "").headers);
+
+  captured = [];
+  await call(Object.assign({}, VALID, { kind: "brief" }));
+  // The subject's em-dash is UTF-8, which decodeSubject leaves as raw bytes,
+  // so match the words either side of it.
+  pass("brief form → 'New brief' subject", /New brief .* Meridian Freight/.test(subjectOf(captured[0])));
+
+  captured = [];
+  await call(Object.assign({}, VALID, { kind: "something-else" }));
+  pass("unknown kind → 'New enquiry'", /New enquiry .* Meridian Freight/.test(subjectOf(captured[0])));
+
+  captured = [];
+  await call(Object.assign({}, VALID, { kind: "brief", services: ["Live security incident"] }));
+  pass("live incident flagged in the subject", subjectOf(captured[0]).includes("URGENT"));
+  pass("live incident flagged in the body", split(captured[0] || "").html.includes("Live security incident."));
+
+  captured = [];
+  await call(Object.assign({}, VALID, { kind: "quote", reference: "BLN-2026-4821", summary: SUMMARY, message: undefined, notes: "Phase the pen test?" }));
+  const q = split(captured[0] || "");
+  pass("quote subject carries reference and total", /BLN-2026-4821.*R 297 600/.test(subjectOf(captured[0])));
+  pass("quote total appears before the contact details",
+    q.html.indexOf("R 297 600") > -1 && q.html.indexOf("R 297 600") < q.html.indexOf("Contact"));
+  pass("quote lines itemised", q.html.includes("Mobile app (iOS + Android)") && q.html.includes("R 22 400"));
+  pass("quote notes titled as client notes", q.html.includes("Client notes") && q.html.includes("Phase the pen test?"));
+
+  captured = [];
+  r = await call(Object.assign({}, VALID, { kind: "quote", reference: "BLN-2026-4821", summary: { total: "lots", lines: "x" }, quote: "TOTAL: R 1" }));
+  pass("malformed quote summary falls back to the plain breakdown",
+    r.statusCode === 200 && split(captured[0] || "").html.includes("TOTAL: R 1"));
+
+  // --- receipt (on by default) -------------------------------------------
   process.env.MAIL_ACK = "true"; reload();
   captured = [];
-  r = await call(Object.assign({}, VALID, { kind: "quote", reference: "BLN-Q-1", quote: "TOTAL: R 1" }));
+  r = await call(Object.assign({}, VALID, { kind: "quote", reference: "BLN-2026-4821", summary: SUMMARY }));
   const receipt = split(captured[1] || "");
-  pass("quote with MAIL_ACK sends lead and receipt", r.statusCode === 200 && captured.length === 2);
+  pass("quote sends lead and receipt", r.statusCode === 200 && captured.length === 2);
   pass("receipt goes to the visitor", /^To:.*t@meridian\.co\.za/mi.test(receipt.headers));
-  pass("receipt names the quotation", decodeSubject(receipt.headers).includes("BLN-Q-1"));
-  pass("receipt greets by first name", (captured[1] || "").includes("Hi Thabo,"));
+  pass("receipt names the quotation", decodeSubject(receipt.headers).includes("BLN-2026-4821"));
+  pass("receipt greets by first name", receipt.html.includes("Hi Thabo,"));
+  pass("receipt echoes no message, company or figures",
+    !receipt.html.includes("peak season") && !receipt.html.includes("Meridian") && !receipt.html.includes("297"));
+
+  captured = [];
+  await call(Object.assign({}, VALID, { kind: "quote", reference: "<b>spam</b> visit evil.example" }));
+  pass("receipt drops a reference that is not ours", !(captured[1] || "").includes("evil.example"));
+
+  captured = [];
+  r = await call(Object.assign({}, VALID, { kind: "brief", email: "bounce@meridian.co.za" }));
+  pass("failed receipt still reports success (lead was sent)", r.statusCode === 200 && captured.length === 1);
+
   process.env.MAIL_ACK = "false"; reload();
+  captured = [];
+  await call(VALID);
+  pass("MAIL_ACK=false sends the lead only", captured.length === 1);
 
   // --- misconfiguration -------------------------------------------------
   const keep = process.env.SMTP_PASS; delete process.env.SMTP_PASS; reload();

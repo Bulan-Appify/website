@@ -166,16 +166,25 @@ Google will not accept your normal account password from a script.
 | `MAIL_FROM` | `"Bulan website <hello@bulan.co.za>"` |
 | `MAIL_TO` | where leads should land |
 | `ALLOWED_ORIGIN` | `https://www.bulan.co.za` once the domain is live. Comma-separate several (`https://bulan.co.za,https://www.bulan.co.za`) if both resolve. |
-| `MAIL_ACK` | `false` — see below |
+| `MAIL_ACK` | `true` (the default). `false` stops the visitor receipt. |
 
 > **`MAIL_FROM` must be your own domain.** Sending "from" the visitor's address
 > fails SPF and DKIM and lands the mail in spam. The function puts the visitor in
 > `Reply-To`, so hitting reply in your inbox still reaches them.
 
-> **`MAIL_ACK` is off deliberately.** The site promises "a considered human reply,
-> not an auto-responder". A templated email arriving three seconds after someone
-> writes to you contradicts that in the most visible way possible. Turn it on only
-> if you decide a delivery receipt is worth the contradiction.
+> **The receipt is on.** The visitor gets an instant email saying their brief or
+> quotation request arrived and that a person will reply within one business day.
+> The site copy says the same, so the receipt does not contradict the "human reply"
+> promise. Because anyone can type any address into a form, the receipt repeats
+> only the first name and a validated `BLN-YYYY-NNNN` reference — no message,
+> company or figures — so it is useless for relaying spam.
+>
+> **One template per form.** `netlify/lib/mail-templates.js` builds the emails.
+> The contact form sends `kind: "brief"` (from `data-kind` on the `<form>`), the
+> quote builder sends `kind: "quote"` with its figures, and anything else is an
+> `enquiry`. A new form gets its own template by adding a `data-kind` and an entry
+> to `KIND` in that file. A brief that ticks *Live security incident* is marked
+> URGENT in the subject.
 
 ### 3.3 Test it locally
 
