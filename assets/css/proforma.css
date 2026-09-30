@@ -8,12 +8,25 @@
 
 #proforma-doc { display: none; }
 
+/* No page margin, on purpose. Browsers print their own header and footer
+   (page title, date, file path or URL, page numbers) inside the page
+   margin, and with no margin there is nowhere to put them. The white
+   space comes from the document instead: side padding here, and a spacer
+   row in the table's thead and tfoot, which browsers repeat on every
+   printed page, so page two gets a top margin too. */
 @media print {
-  @page { size: A4; margin: 16mm 14mm; }
+  @page { size: A4; margin: 0; }
   body.print-doc > * { display: none !important; }
-  body.print-doc #proforma-doc { display: block !important; }
-  body.print-doc { background: #fff !important; }
+  body.print-doc #proforma-doc { display: block !important; padding: 0 14mm; }
+  body.print-doc { background: #fff !important; margin: 0 !important; padding: 0 !important; }
+  html:has(body.print-doc) { background: #fff !important; }
 }
+#proforma-doc .pf-page { width: 100%; border-collapse: collapse; }
+#proforma-doc .pf-page > thead > tr > td,
+#proforma-doc .pf-page > tfoot > tr > td,
+#proforma-doc .pf-page > tbody > tr > td { padding: 0; border: 0; }
+#proforma-doc .pf-space-top { height: 16mm; }
+#proforma-doc .pf-space-bottom { height: 14mm; }
 
 #proforma-doc .pf {
   font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -55,6 +68,11 @@
 #proforma-doc .pf-items td { padding: 11px 0; border-bottom: 1px solid #E6EAF0; vertical-align: top; }
 #proforma-doc .pf-items td.pf-r { font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 24px; }
 #proforma-doc .pf-note { font-size: 8.5pt; color: #6B7688; }
+/* Browsers repeat a table's tfoot at the foot of every printed page, which
+   would print "Total" under page one of a long quotation. Render it as an
+   ordinary row group so the totals appear once, after the last line. The
+   thead still repeats, so each page keeps its column headings. */
+#proforma-doc .pf-items tfoot { display: table-row-group; }
 #proforma-doc .pf-items tfoot th { padding: 8px 24px 8px 0; font-weight: 500; color: #5A6474; }
 #proforma-doc .pf-items tfoot td { padding: 8px 0; font-variant-numeric: tabular-nums; }
 #proforma-doc .pf-items tfoot .pf-total th,

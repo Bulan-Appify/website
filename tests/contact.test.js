@@ -6,15 +6,19 @@
  * validation, header safety, escaping and composition are exercised for
  * real. No credentials and no network: nothing leaves the machine.
  *
- * Two log lines are expected: "receipt failed" is the case proving a
- * bounced receipt still reports success, and "Mail endpoint is not
- * configured" is the last case deliberately removing the password to
- * prove a misconfiguration returns 500 rather than crashing.
+ * Three log lines are expected: "Rejected a form post" is the
+ * cross-origin case, "receipt failed" is the case proving a bounced
+ * receipt still reports success, and "Mail endpoint is not configured"
+ * is the last case deliberately removing the password to prove a
+ * misconfiguration returns 500 rather than crashing.
  */
 const net = require("net");
 const path = require("path");
 
 const FN = path.join(__dirname, "..", "netlify", "functions", "contact.js");
+
+// The function logs each successful send; keep the test output to PASS/FAIL.
+console.info = () => {};
 const PORT = 2599;
 let captured = [];
 

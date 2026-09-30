@@ -25,6 +25,7 @@
 # and only applies a redirect when nothing is there to shadow it.
 /netlify/*            /404.html   404!
 /tests/*              /404.html   404!
+/scripts/*            /404.html   404!
 /node_modules/*       /404.html   404!
 /README.md            /404.html   404!
 /BRAND.md             /404.html   404!
