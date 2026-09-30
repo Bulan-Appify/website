@@ -390,7 +390,12 @@
       host.id = 'proforma-doc';
       document.body.appendChild(host);
     }
-    host.innerHTML = html;
+    host.innerHTML =
+      '<table class="pf-page" role="presentation">' +
+        '<thead><tr><td><div class="pf-space-top"></div></td></tr></thead>' +
+        '<tfoot><tr><td><div class="pf-space-bottom"></div></td></tr></tfoot>' +
+        '<tbody><tr><td>' + html + '</td></tr></tbody>' +
+      '</table>';
     return host;
   }
 
@@ -477,10 +482,29 @@
       '&body=' + encodeURIComponent(plainText(q, d));
   });
 
-  $('#qb-print').addEventListener('click', function () {
+  /* Printing. The document title is what "Save as PDF" suggests as the
+     file name (and what a browser prints if its headers are forced on),
+     so it names the quotation rather than the web page. beforeprint also
+     catches Ctrl+P once a quotation exists, so the shortcut prints the
+     document and not the builder. */
+  var pageTitle = document.title;
+  function startPrint() {
+    if (!reference || !document.getElementById('proforma-doc')) return;
     document.body.classList.add('print-doc');
+    document.title = 'Bulan quotation ' + reference;
+  }
+  function endPrint() {
+    document.body.classList.remove('print-doc');
+    document.title = pageTitle;
+  }
+  window.addEventListener('beforeprint', startPrint);
+  window.addEventListener('afterprint', endPrint);
+
+  $('#qb-print').addEventListener('click', function () {
+    startPrint();
     window.print();
-    setTimeout(function () { document.body.classList.remove('print-doc'); }, 600);
+    // Some browsers skip afterprint; do not leave the page stuck in print mode.
+    setTimeout(endPrint, 1000);
   });
 
   $('#qb-email').addEventListener('click', function () {
@@ -493,6 +517,7 @@
 
   $('#qb-restart').addEventListener('click', function () {
     state = { items: {}, timeline: 'standard', months: 6, care: false };
+    reference = '';   // so Ctrl+P prints the builder again, not the old quotation
     $$('#qb-catalog input, #qb-care input').forEach(function (i) { i.checked = false; });
     var std = $('input[name="tl"][value="standard"]'); if (std) std.checked = true;
     if (monthsEl) monthsEl.value = '6';
