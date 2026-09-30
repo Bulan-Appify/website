@@ -159,6 +159,12 @@ const VALID = {
   pass("services array flattened", parts.html.includes("Software development, Cyber security"));
   pass("brief included", parts.html.includes("peak season"));
 
+  // One ticked checkbox arrives as a string, not an array.
+  captured = [];
+  r = await call(Object.assign({}, VALID, { services: "Cyber security" }));
+  const single = split(captured[0] || "");
+  pass("single service (string) included", r.statusCode === 200 && single.html.includes("Cyber security"));
+
   // --- injection + escaping -------------------------------------------
   captured = [];
   await call(Object.assign({}, VALID, {

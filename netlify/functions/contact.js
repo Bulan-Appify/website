@@ -108,8 +108,11 @@ exports.handler = async (event) => {
   for (const [k, max] of Object.entries(LIMITS)) {
     if (data[k] != null) f[k] = String(data[k]).trim().slice(0, max);
   }
-  if (Array.isArray(data.services)) {
-    f.services = data.services.map((s) => String(s).slice(0, 80)).slice(0, 12).join(", ");
+  // FormData sends one ticked checkbox as a plain string and several as an
+  // array, so accept both or a single chosen service silently disappears.
+  const services = [].concat(data.services == null ? [] : data.services).filter(Boolean);
+  if (services.length) {
+    f.services = services.map((s) => String(s).slice(0, 80)).slice(0, 12).join(", ");
   }
 
   // Collapse whitespace in the short fields. A name or company holding a
